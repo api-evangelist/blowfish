@@ -1,0 +1,1041 @@
+openapi: 3.1.0
+info:
+  title: API reference Download blocklist Scan message API
+  version: '2022-06-01'
+  description: The Blowfish API reference specification
+  contact:
+    name: Blowfish API Support
+    email: contact@blowfish.xyz
+    url: https://blowfish.xyz
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+servers:
+- url: https://free.api.blowfish.xyz
+  description: API server for clients on the free plan
+- url: https://api.blowfish.xyz
+  description: API server for all other clients (e.g., Enterprise)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Scan message
+  description: Endpoints related to scanning blockchain messages
+paths:
+  /ethereum/v0/mainnet/scan/message:
+    post:
+      tags:
+      - Scan message
+      summary: EVM
+      operationId: scan-message-evm
+      description: 'Scan an EVM message in order to receive recommended actions, tailored warnings and human-readable simulation results explaining what signing the message will do.
+
+        ### Supported networks
+
+        | Network | Base URL |
+
+        | --- | --- |
+
+        | Ethereum Mainnet | https://api.blowfish.xyz/ethereum/v0/mainnet/scan/message |
+
+        | Goerli Testnet | https://api.blowfish.xyz/ethereum/v0/goerli/scan/message |
+
+        | Polygon Mainnet | https://api.blowfish.xyz/polygon/v0/mainnet/scan/message |
+
+        Note:  The Ethereum and Polygon endpoints are equivalent when it comes to functionality as well as request and response formats.
+
+        Note 2: If you are using a free, self-service API key from our Developer Portal, be sure to add the `free` subdomain (e.g., `https://free.api.blowfish.xyz`) to the above endpoints.
+
+        '
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: language
+        in: query
+        description: The language to use in the returned human-readable warnings and simulation results
+        schema:
+          $ref: '#/components/schemas/Languages'
+      - name: X-Api-Key
+        in: header
+        description: API Key
+        required: true
+        schema:
+          $ref: '#/components/schemas/ApiKeyHeader'
+      - name: X-Api-Version
+        in: header
+        description: Which version of the API to use
+        schema:
+          $ref: '#/components/schemas/ApiVersionHeader'
+      - name: Content-Type
+        in: header
+        description: The expected return content type
+        schema:
+          $ref: '#/components/schemas/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  description: An object containing the message type and contents
+                  oneOf:
+                  - $ref: '#/components/schemas/EvmSignTypedData'
+                  - $ref: '#/components/schemas/EvmSignMessage'
+                  discriminator:
+                    propertyName: kind
+                    mapping:
+                      SIGN_TYPED_DATA: '#/components/schemas/EvmSignTypedData'
+                      SIGN_MESSAGE: '#/components/schemas/EvmSignMessage'
+                metadata:
+                  $ref: '#/components/schemas/RequestMetadata'
+                userAccount:
+                  $ref: '#/components/schemas/EvmUserAccount'
+              required:
+              - message
+              - metadata
+              - userAccount
+            examples:
+              usdc_permit2:
+                summary: Example request for USDC Permit2 SignatureTransfer with witness and unlimited expiry
+                value:
+                  message:
+                    kind: SIGN_TYPED_DATA
+                    data:
+                      domain:
+                        name: Permit2
+                        chainId: '1'
+                        verifyingContract: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                      types:
+                        PermitWitnessTransferFrom:
+                        - name: permitted
+                          type: TokenPermissions
+                        - name: spender
+                          type: address
+                        - name: nonce
+                          type: uint256
+                        - name: deadline
+                          type: uint256
+                        - name: witness
+                          type: MockWitness
+                        TokenPermissions:
+                        - name: token
+                          type: address
+                        - name: amount
+                          type: uint256
+                        MockWitness:
+                        - name: mock
+                          type: uint256
+                      primaryType: PermitWitnessTransferFrom
+                      message:
+                        permitted:
+                          token: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                          amount: '13675000000'
+                        spender: '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
+                        nonce: '0'
+                        deadline: '281474976710655'
+                        witness:
+                          mock: '0x0000000000000000000000000000000000000000000000000000000000000000'
+                  userAccount: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+                  metadata:
+                    origin: https://exampledapp.com
+              usdc_permit:
+                summary: Example request for USDC Permit (approval) with unlimited expiry
+                value:
+                  message:
+                    kind: SIGN_TYPED_DATA
+                    data:
+                      types:
+                        EIP712Domain:
+                        - name: name
+                          type: string
+                        - name: version
+                          type: string
+                        - name: chainId
+                          type: uint256
+                        - name: verifyingContract
+                          type: address
+                        Permit:
+                        - name: owner
+                          type: address
+                        - name: spender
+                          type: address
+                        - name: value
+                          type: uint256
+                        - name: nonce
+                          type: uint256
+                        - name: deadline
+                          type: uint256
+                      domain:
+                        name: USD Coin
+                        version: '2'
+                        verifyingContract: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                        chainId: '1'
+                      primaryType: Permit
+                      message:
+                        owner: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+                        spender: '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
+                        value: '123000000000'
+                        nonce: '7'
+                        deadline: '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+                  userAccount: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+                  metadata:
+                    origin: https://exampledapp.com
+              seaport_order:
+                summary: Opensea Seaport Order Request
+                value:
+                  metadata:
+                    origin: https://opensea.io
+                  userAccount: '0xed2ab4948ba6a909a7751dec4f34f303eb8c7236'
+                  message:
+                    kind: SIGN_TYPED_DATA
+                    data:
+                      types:
+                        EIP712Domain:
+                        - name: name
+                          type: string
+                        - name: version
+                          type: string
+                        - name: chainId
+                          type: uint256
+                        - name: verifyingContract
+                          type: address
+                        OrderComponents:
+                        - name: offerer
+                          type: address
+                        - name: zone
+                          type: address
+                        - name: offer
+                          type: OfferItem[]
+                        - name: consideration
+                          type: ConsiderationItem[]
+                        - name: orderType
+                          type: uint8
+                        - name: startTime
+                          type: uint256
+                        - name: endTime
+                          type: uint256
+                        - name: zoneHash
+                          type: bytes32
+                        - name: salt
+                          type: uint256
+                        - name: conduitKey
+                          type: bytes32
+                        - name: counter
+                          type: uint256
+                        OfferItem:
+                        - name: itemType
+                          type: uint8
+                        - name: token
+                          type: address
+                        - name: identifierOrCriteria
+                          type: uint256
+                        - name: startAmount
+                          type: uint256
+                        - name: endAmount
+                          type: uint256
+                        ConsiderationItem:
+                        - name: itemType
+                          type: uint8
+                        - name: token
+                          type: address
+                        - name: identifierOrCriteria
+                          type: uint256
+                        - name: startAmount
+                          type: uint256
+                        - name: endAmount
+                          type: uint256
+                        - name: recipient
+                          type: address
+                      primaryType: OrderComponents
+                      domain:
+                        name: Seaport
+                        version: '1.1'
+                        chainId: '1'
+                        verifyingContract: '0x00000000006c3852cbEf3e08E8dF289169EdE581'
+                      message:
+                        offerer: '0xed2ab4948bA6A909a7751DEc4F34f303eB8c7236'
+                        offer:
+                        - itemType: '2'
+                          token: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+                          identifierOrCriteria: '1726'
+                          startAmount: '1'
+                          endAmount: '1'
+                        consideration:
+                        - itemType: '0'
+                          token: '0x0000000000000000000000000000000000000000'
+                          identifierOrCriteria: '0'
+                          startAmount: '94050000000000000000'
+                          endAmount: '94050000000000000000'
+                          recipient: '0xed2ab4948bA6A909a7751DEc4F34f303eB8c7236'
+                        - itemType: '0'
+                          token: '0x0000000000000000000000000000000000000000'
+                          identifierOrCriteria: '0'
+                          startAmount: '2475000000000000000'
+                          endAmount: '2475000000000000000'
+                          recipient: '0x0000a26b00c1F0DF003000390027140000fAa719'
+                        - itemType: '0'
+                          token: '0x0000000000000000000000000000000000000000'
+                          identifierOrCriteria: '0'
+                          startAmount: '2475000000000000000'
+                          endAmount: '2475000000000000000'
+                          recipient: '0xA858DDc0445d8131daC4d1DE01f834ffcbA52Ef1'
+                        startTime: '1664436437'
+                        endTime: '1667028437'
+                        orderType: '2'
+                        zone: '0x004C00500000aD104D7DBd00e3ae0A5C00560C00'
+                        zoneHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
+                        salt: '24446860302761739304752683030156737591518664810215442929818054330004503495628'
+                        conduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000'
+                        totalOriginalConsiderationItems: '3'
+                        counter: '53'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  action:
+                    $ref: '#/components/schemas/ActionEnum'
+                  warnings:
+                    $ref: '#/components/schemas/Warning'
+                  simulationResults:
+                    type: object
+                    description: 'A nullable object. Message simulation requires in-depth understanding of the contract verifying the message and is not a generalizable solution that works for any message. If we do not support simulating a particular message the simulationResults property will be returned as null and the recommended action is to fallback to showing the raw message data to the user before they sign
+
+                      Currently supported messages: OpenSea Seaport orders & ERC20 Permit approvals
+
+                      '
+                    properties:
+                      expectedStateChanges:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            humanReadableDiff:
+                              type: string
+                              example: Send 10000 USDT
+                              description: Computed explanation of the state change that can be directly presented to the end-user. While the API is still in development, we suggest integrators expose this in their signing UI if they encounter a `rawInfo.kind` they don't recognize.
+                            rawInfo:
+                              description: A machine-parsable state change object describing the state change.
+                              oneOf:
+                              - $ref: '#/components/schemas/EvmStateChangeErc20Permit'
+                              - $ref: '#/components/schemas/EvmStateChangeErc20Transfer'
+                              - $ref: '#/components/schemas/EvmStateChangeNativeAssetTransfer'
+                              - $ref: '#/components/schemas/EvmStateChangeErc721Transfer'
+                              - $ref: '#/components/schemas/EvmStateChangeErc1155Transfer'
+                              discriminator:
+                                propertyName: kind
+                                mapping:
+                                  ERC20_PERMIT: '#/components/schemas/EvmStateChangeErc20Permit'
+                                  ERC20_TRANSFER: '#/components/schemas/EvmStateChangeErc20Transfer'
+                                  NATIVE_ASSET_TRANSFER: '#/components/schemas/EvmStateChangeNativeAssetTransfer'
+                                  ERC721_TRANSFER: '#/components/schemas/EvmStateChangeErc721Transfer'
+                                  ERC1155_TRANSFER: '#/components/schemas/EvmStateChangeErc1155Transfer'
+                      error:
+                        description: A nullable error object which includes the parsed simulation error encountered (if any)
+                        nullable: true
+                        type: object
+                        properties:
+                          kind:
+                            type: string
+                            description: 'A unique representation of the error kind
+
+
+                              UNSUPPORTED_ORDER_TYPE: Opensea order simulation currently supports basic order types for swapping ERC20/721/1155 <-> ERC20/721/1155, advanced order types using attribute criteria are not supported. If the message is a valid OpenSea order but of a type not supported UNSUPPORTED_ORDER_TYPE will be returned
+
+
+                              UNKNOWN_ERROR: We were not able to simulate the state changes of the message for an unknown reason, however the transaction it self did not revert so the user can proceed with caution
+
+                              '
+                            example: UNSUPPORTED_ORDER_TYPE
+                            enum:
+                            - UNSUPPORTED_ORDER_TYPE
+                            - UNKNOWN_ERROR
+                          humanReadableError:
+                            type: string
+                            description: Human readable & translated string that can be directly exposed to end-users
+                            example: Unsupported order type, unable to simulate message
+              examples:
+                erc20_permit:
+                  summary: ERC20 Permit
+                  value:
+                    action: NONE
+                    warnings: []
+                    simulationResults:
+                      expectedStateChanges:
+                      - humanReadableDiff: Permit to transfer up to 123 USDC within an hour
+                        rawInfo:
+                          kind: ERC20_PERMIT
+                          data:
+                            contract:
+                              kind: ACCOUNT
+                              address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                            name: USD Coin
+                            symbol: USDC
+                            decimals: 6
+                            owner:
+                              kind: ACCOUNT
+                              address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+                            spender:
+                              kind: ACCOUNT
+                              address: '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45'
+                            amount: '123000000'
+                            nonce: '2'
+                            deadline: 1667799719
+                            asset:
+                              address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                              symbol: USDC
+                              name: USD Coin
+                              decimals: 6
+                              verified: true
+                              lists:
+                              - COINGECKO
+                              - ZERION
+                              - ONE_INCH
+                              - UNISWAP
+                              - MY_CRYPTO_API
+                              - KLEROS_TOKENS
+                              imageUrl: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png
+                      error: null
+                seaport_order:
+                  summary: Opensea Seaport Order Selling NFT for ETH
+                  value:
+                    action: NONE
+                    simulationResults:
+                      error: null
+                      expectedStateChanges:
+                      - humanReadableDiff: Receive 94.05 ETH
+                        rawInfo:
+                          data:
+                            amount:
+                              after: '157873734139299463313'
+                              before: '63823734139299463313'
+                            contract:
+                              address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+                              kind: ACCOUNT
+                            decimals: 18
+                            name: Ether
+                            symbol: ETH
+                          kind: NATIVE_ASSET_TRANSFER
+                      - humanReadableDiff: Send BoredApeYachtClub
+                        rawInfo:
+                          data:
+                            amount:
+                              after: '52'
+                              before: '53'
+                            contract:
+                              address: '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d'
+                              kind: ACCOUNT
+                            metadata:
+                              rawImageUrl: ipfs://QmYqXQb3xFNWDkNno34GNL435yMbjt4B8b89LvBA75A9VP
+                            name: BoredApeYachtClub
+                            symbol: BAYC
+                            tokenId: '1726'
+                          kind: ERC721_TRANSFER
+                    warnings: []
+                unlimited_permit:
+                  summary: Unlimit amount permit message
+                  value:
+                    action: WARN
+                    simulationResults:
+                      error: null
+                      expectedStateChanges:
+                      - humanReadableDiff: Permit to transfer all your UNI within 2 days
+                        rawInfo:
+                          data:
+                            amount: '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+                            asset:
+                              address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+                              decimals: 18
+                              imageUrl: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x1f9840a85d5af5bf1d1762f925bdaddc4201f984.png
+                              lists:
+                              - COINGECKO
+                              - ZERION
+                              - ONE_INCH
+                              - UNISWAP
+                              - MY_CRYPTO_API
+                              - KLEROS_TOKENS
+                              name: Uniswap
+                              symbol: UNI
+                              verified: true
+                            contract:
+                              address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+                              kind: ACCOUNT
+                            deadline: 1667556263
+                            decimals: 18
+                            name: Uniswap
+                            nonce: '0'
+                            owner:
+                              address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+                              kind: ACCOUNT
+                            spender:
+                              address: '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45'
+                              kind: ACCOUNT
+                            symbol: UNI
+                          kind: ERC20_PERMIT
+                      warnings:
+                      - kind: PERMIT_UNLIMITED_ALLOWANCE
+                        message: You are allowing this dApp to withdraw funds from your account in the future
+                        severity: WARNING
+                    warnings: []
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    EvmStateChangeErc721Transfer:
+      type: object
+      description: ERC721 NFT transfers
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC721_TRANSFER
+          example: ERC721_TRANSFER
+        data:
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            metadata:
+              $ref: '#/components/schemas/EvmNftMetadata'
+            name:
+              $ref: '#/components/schemas/EvmName'
+            symbol:
+              $ref: '#/components/schemas/EvmSymbol'
+            tokenId:
+              $ref: '#/components/schemas/EvmErc721TokenId'
+            assetPrice:
+              description: The NFT collection's $-value floor price
+              $ref: '#/components/schemas/LegacyAssetPrice'
+          description: Data associated with the state change
+    EvmStateChangeErc1155Transfer:
+      type: object
+      description: ERC1155 transfers
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC1155_TRANSFER
+          example: ERC1155_TRANSFER
+        data:
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            metadata:
+              $ref: '#/components/schemas/EvmNftMetadata'
+            tokenId:
+              $ref: '#/components/schemas/EvmErc1155TokenId'
+            assetPrice:
+              description: The NFT collection's $-value floor price
+              $ref: '#/components/schemas/LegacyAssetPrice'
+          description: Data associated with the state change
+    Warning:
+      type: array
+      description: An array of warnings generated from scanning the transactions. All these warnings won't be returned in a single response (some are mutually exclusive) but it is advisable that your UI can display multiple warnings. Warnings are returned sorted by severity, so if you can only show a user one warning, show them the one at the 0th index.
+      items:
+        type: object
+        properties:
+          severity:
+            type: string
+            description: warning severity level. We suggest a yellow message if "WARNING", and a red message if "CRITICAL".
+            enum:
+            - CRITICAL
+            - WARNING
+            example: WARNING
+          kind:
+            type: string
+            description: Warning kind. Can be used to override specific warnings with your own custom versions. We reserve the right to add new warnings as the need arises, so your UI should likewise defer to the supplied message if the kind isn't recognized by your code.
+            enum:
+            - SUSPECTED_MALICIOUS
+            - KNOWN_MALICIOUS
+            - TRANSFERRING_ERC20_TO_OWN_CONTRACT
+            - UNLIMITED_ALLOWANCE_TO_NFTS
+            - BULK_APPROVALS_REQUEST
+            - SET_OWNER_AUTHORITY
+            - TRUSTED_BLOCKLIST_DOMAIN
+            - SEMI_TRUSTED_BLOCKLIST_DOMAIN
+            - DANGLING_APPROVAL
+            - TRADE_FOR_NOTHING
+            - PERMIT_UNLIMITED_ALLOWANCE
+            - PERMIT_NO_EXPIRATION
+            - ETH_SIGN_TX_HASH
+            - OBFUSCATED_CODE
+            - DEVTOOLS_DISABLED
+            - BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+            - WHITELISTED_DOMAIN_CROSS_ORIGIN
+            - TOO_MANY_TRANSACTIONS
+            - NON_ASCII_URL
+            - COMPROMISED_AUTHORITY_UPGRADE
+            - POISONED_ADDRESS
+            - APPROVAL_TO_E_O_A
+            - COPY_CAT_DOMAIN
+            example: SUSPECTED_MALICIOUS
+          message:
+            type: string
+            description: human-readable message to present to the end-user
+            example: 'Domain found on blocklists maintained by/: Blowfish. This website is very likely to be a scam.'
+    ApiKeyHeader:
+      description: API key
+      type: string
+      default: 4daa1e3b-87e6-40b2-8883-758feb6a8e46
+      example: e79e18b4-8ffa-4fab-9e2e-f24057644f93
+    EvmSymbol:
+      type: string
+      example: USDT
+    EvmErc721TokenId:
+      type: string
+      nullable: true
+      example: '100'
+      description: The ID of the ERC721 token. It can temporarily be null in some edge cases where we are unable to parse it
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+          - Internal Server Error
+          example: Internal Server Error
+    EvmSignMessage:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum:
+          - SIGN_MESSAGE
+          example: SIGN_MESSAGE
+        rawMessage:
+          type: string
+          example: '0x40ac14ef28d35fb4540e0cd0950123b378224d3585ec887c26f7a510da544552'
+          description: The hex encoded eth_sign message that the dapp is proposing the user to sign.
+      required:
+      - kind
+      - rawMessage
+    ContentType:
+      description: Expected response content type
+      type: string
+      default: application/json
+      example: application/json
+    Languages:
+      type: string
+      default: en
+      example: en
+      description: Specify the desired language for the returned warning messages and human-readable simulation results. If unknown, defaults to English.
+      enum:
+      - am
+      - ar
+      - ar-SA
+      - ar-EG
+      - ar-DZ
+      - ar-MA
+      - ar-IQ
+      - ar-JO
+      - ar-KW
+      - ar-LB
+      - ar-LY
+      - ar-OM
+      - ar-QA
+      - ar-SY
+      - ar-TN
+      - ar-AE
+      - ar-YE
+      - bn
+      - fr
+      - fr-BE
+      - fr-CA
+      - fr-FR
+      - fr-LU
+      - fr-CH
+      - de
+      - de-AT
+      - de-DE
+      - de-LI
+      - de-LU
+      - de-CH
+      - en
+      - en-US
+      - en-GB
+      - en-CA
+      - en-AU
+      - en-NZ
+      - en-ZA
+      - en-IE
+      - en-IN
+      - en-SG
+      - en-JM
+      - en-BZ
+      - en-TT
+      - en-PH
+      - it
+      - it-IT
+      - it-CH
+      - ms
+      - ms-BN
+      - ms-MY
+      - pt
+      - pt-BR
+      - pt-PT
+      - ru
+      - ru-RU
+      - es
+      - es-AR
+      - es-BO
+      - es-CL
+      - es-CO
+      - es-CR
+      - es-CU
+      - es-DO
+      - es-EC
+      - es-SV
+      - es-GQ
+      - es-GT
+      - es-HN
+      - es-MX
+      - es-NI
+      - es-PA
+      - es-PY
+      - es-PE
+      - es-PH
+      - es-PR
+      - es-ES
+      - es-US
+      - es-UY
+      - es-VE
+      - sw
+      - tr
+      - tr-TR
+      - fil
+      - gu_IN
+      - ha
+      - hi
+      - id
+      - ig
+      - ja
+      - ko
+      - my
+      - pa
+      - ta
+      - th
+      - vi
+      - yo
+      - zh_CN
+      - zh_TW
+    EvmErc1155TokenId:
+      type: string
+      nullable: true
+      example: '100'
+      description: The ID of the ERC1155 token
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 401
+          example: 'Unauthorized: invalid X-API-KEY header value'
+    EvmNftMetadata:
+      type: object
+      properties:
+        rawImageUrl:
+          type: string
+          format: uri
+          example: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x6b175474e89094c44da98b954eedeac495271d0f.png
+      description: Metadata associated with the NFT
+    EvmStateChangeErc20Permit:
+      type: object
+      description: ERC20 token permit message
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC20_PERMIT
+          example: ERC20_PERMIT
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            owner:
+              description: The owner of the ERC20 tokens
+              $ref: '#/components/schemas/EvmAddressInfo'
+            spender:
+              description: The entity that will be allowed to spend them if the permit is granted
+              $ref: '#/components/schemas/EvmAddressInfo'
+            amount:
+              type: string
+              description: Stringified base unit amount of the token
+              example: '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+            nonce:
+              type: string
+              description: Stringified nonce number
+              example: '0'
+            deadline:
+              type: number
+              description: Unix timestamp when this permit will expire
+              example: 1667556263
+            asset:
+              $ref: '#/components/schemas/EvmAsset'
+          description: Data associated with the state change
+    LegacyAssetPrice:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - Simplehash
+          - Defillama
+          - Coingecko
+          example: Coingecko
+        last_updated_at:
+          type: number
+          example: 1679331222
+        dollar_value_per_token:
+          type: number
+          format: float
+          example: 0.2784
+    EvmUserAccount:
+      type: string
+      description: A hex-representation of the user account who is being asked to sign the supplied transaction. In most cases this will be the same as the from property in the txObject
+      example: '0xc1e42f862d202b4a0ed552c1145735ee088f6ccf'
+    EvmAddressInfo:
+      type: object
+      properties:
+        address:
+          type: string
+          example: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+          description: The blockchain address
+        kind:
+          type: string
+          enum:
+          - ACCOUNT
+          example: ACCOUNT
+          description: The type of address
+    EvmDecimals:
+      type: integer
+      example: 6
+    RequestMetadata:
+      type: object
+      properties:
+        origin:
+          type: string
+          description: DApp domain proposing these transactions
+          example: https://uniswap.org
+      required:
+      - origin
+    EvmAsset:
+      type: object
+      properties:
+        address:
+          type: string
+          example: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+          description: The contract address of the asset
+        symbol:
+          type: string
+          example: USDT
+          description: The symbol of the asset
+        name:
+          type: string
+          example: Tether USD
+          description: The name of the asset
+        decimals:
+          type: integer
+          example: 6
+          description: The number of decimal places used by the asset
+        verified:
+          type: boolean
+          example: true
+          description: Whether the asset is verified as safe
+        lists:
+          type: array
+          items:
+            type: string
+            enum:
+            - COINGECKO
+            - ZERION
+            - ONE_INCH
+            - UNISWAP
+            - MY_CRYPTO_API
+            - KLEROS_TOKENS
+            - POLYGON_POPULAR_TOKENS
+            - EVM_NATIVE
+            example: COINGECKO
+          description: The trusted token lists on which this asset is listed
+        imageUrl:
+          type: string
+          description: The URL of the asset's image
+          nullable: true
+          example: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x6b175474e89094c44da98b954eedeac495271d0f.png
+        price:
+          description: $-value price of the asset. Floor price of the collection if asset is an NFT.
+          $ref: '#/components/schemas/AssetPrice'
+    EvmSignTypedData:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum:
+          - SIGN_TYPED_DATA
+          example: SIGN_TYPED_DATA
+        data:
+          type: object
+          properties:
+            types:
+              type: object
+              properties:
+                EIP712Domain:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Seaport
+                      type:
+                        type: string
+                        example: string
+              additionalProperties: true
+            primaryType:
+              type: string
+              example: OrderComponents
+            domain:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Seaport
+                version:
+                  type: string
+                  example: '1.4'
+                chainId:
+                  type: string
+                  example: '1'
+                verifyingContract:
+                  type: string
+                  example: '0x00000000000001ad428e4906aE43D8F9852d0dD6'
+            message:
+              type: object
+              additionalProperties: true
+    EvmAmount:
+      type: object
+      properties:
+        after:
+          type: string
+          example: '5000000000'
+          description: The value of the amount after the state change occurs
+        before:
+          type: string
+          example: '15000000000'
+          description: The value of the amount before the state change occurs
+    AssetPrice:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - Simplehash
+          - Defillama
+          - Coingecko
+          example: Coingecko
+        updatedAt:
+          type: number
+          example: 1679331222
+        dollarValuePerToken:
+          type: number
+          format: float
+          example: 0.2784
+    ActionEnum:
+      type: string
+      enum:
+      - NONE
+      - BLOCK
+      - WARN
+      description: "An enum value specifying the suggested action for a wallet to take.\nPossible values:\n  - `BLOCK`: Show the user a block screen instead of the signing UI since this is highly likely to be a malicious transaction. We suggest still having a greyed out link allowing the user to proceed if they really think they know better\n  - `WARN`: Show the user the supplied warnings.\n  - `NONE`: Show the signing UI without modification.\n"
+      example: WARN
+    EvmStateChangeErc20Transfer:
+      type: object
+      description: ERC20 token transfers
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC20_TRANSFER
+          example: ERC20_TRANSFER
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            asset:
+              $ref: '#/components/schemas/EvmAsset'
+          description: Data associated with the state change
+    EvmStateChangeNativeAssetTransfer:
+      type: object
+      description: ETH transfers
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - NATIVE_ASSET_TRANSFER
+          example: NATIVE_ASSET_TRANSFER
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            decimals:
+              $ref: '#/components/schemas/EvmDecimals'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            symbol:
+              $ref: '#/components/schemas/EvmSymbol'
+            name:
+              $ref: '#/components/schemas/EvmName'
+          description: Data associated with the state change
+    EvmName:
+      type: string
+      example: Tether USD
+    BadRequest:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 400
+          example: No transactions to simulate
+    ApiVersionHeader:
+      type: string
+      description: API version like 2022-06-01
+      default: '2022-06-01'
+      example: '2022-06-01'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key

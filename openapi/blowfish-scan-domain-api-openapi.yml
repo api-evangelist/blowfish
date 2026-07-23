@@ -1,0 +1,220 @@
+openapi: 3.1.0
+info:
+  title: API reference Download blocklist Scan domain API
+  version: '2022-06-01'
+  description: The Blowfish API reference specification
+  contact:
+    name: Blowfish API Support
+    email: contact@blowfish.xyz
+    url: https://blowfish.xyz
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+servers:
+- url: https://free.api.blowfish.xyz
+  description: API server for clients on the free plan
+- url: https://api.blowfish.xyz
+  description: API server for all other clients (e.g., Enterprise)
+security:
+- ApiKeyAuth: []
+tags:
+- name: Scan domain
+  description: Endpoints related to scanning dApp domains
+paths:
+  /v0/domains:
+    post:
+      tags:
+      - Scan domain
+      summary: Domain
+      operationId: scan-domain
+      description: 'This endpoint allows customers to analyze dApp domains to determine if they are safe for users to interact with
+
+        '
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: X-Api-Key
+        in: header
+        description: API Key
+        required: true
+        schema:
+          $ref: '#/components/schemas/ApiKeyHeader'
+      - name: X-Api-Version
+        in: header
+        description: Which version of the API to use
+        schema:
+          $ref: '#/components/schemas/ApiVersionHeader'
+      - name: Content-Type
+        in: header
+        description: The expected return content type
+        schema:
+          $ref: '#/components/schemas/ContentType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Object with domains property of type array
+              properties:
+                domains:
+                  type: array
+                  items:
+                    type: string
+                    description: Domains to check. Be sure to submit fully-qualified urls (with protocol prefix -- e.g., http)
+                    example: https://iaunchmynft.io
+            examples:
+              basic:
+                summary: Several suspicious domains
+                value:
+                  domains:
+                  - https://magicedennss.it
+                  - https://1nich.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    domain:
+                      type: string
+                      description: A sanitized, registerable representation of the URL submitted. By registerable, we mean either the domain registerable with a domain registrar (e.g., example.com) or a sub-domain registerable on a hosting providers domain (e.g., my-project.vercel.app).
+                      example: dustprotocol.dev
+                    status:
+                      type: string
+                      description: "The status of our domain analysis. Since our analysis can take some time, rather than block the API request until we've finished, we schedule the evaluation and return a response immediately. \n\nPROCESSING -> The analysis is under way\nUNPROCESSABLE -> We were unable to analyze the domain. This usually means that the website was unreachable or did not include valid HTML\nPROCESSED -> Our analysis completed successfully\n"
+                      enum:
+                      - PROCESSED
+                      - PROCESSING
+                      - UNPROCESSABLE
+                      example: PROCESSED
+                    riskScore:
+                      type: number
+                      description: A risk score from 0.0 to 1.0. The higher the score, the higher our certainty that this domain is hosting a crypto-native scam.
+                      format: float
+                      example: 1.0
+                    labels:
+                      type: array
+                      description: 'Additional metadata about the domain and our evaluation. Possible labels include
+
+
+                        Blockchain -> Which blockchain this domain attempts to interact with
+
+                        Warning -> If we''ve detected scam-like behavior, a warning label describing what was found will be included. If we know which blockchain the scam dApp is built for, this information is also included. We reserve the right to add new warnings at any time so handle new additions gracefully.
+
+                        '
+                      items:
+                        type: string
+                        enum:
+                        - blockchain=solana
+                        - blockchain=ethereum
+                        - blockchain=polygon
+                        - warning[all]=BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[all]=OBFUSCATED_CODE
+                        - warning[all]=DEVTOOLS_DISABLED
+                        - warning[all]=WHITELISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[all]=TRUSTED_BLOCKLIST_DOMAIN
+                        - warning[all]=NON_ASCII_URL
+                        - warning[evm]=BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[evm]=OBFUSCATED_CODE
+                        - warning[evm]=DEVTOOLS_DISABLED
+                        - warning[evm]=WHITELISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[evm]=TRUSTED_BLOCKLIST_DOMAIN
+                        - warning[solana]=NON_ASCII_URL
+                        - warning[solana]=BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[solana]=OBFUSCATED_CODE
+                        - warning[solana]=DEVTOOLS_DISABLED
+                        - warning[solana]=WHITELISTED_DOMAIN_CROSS_ORIGIN
+                        - warning[solana]=TRUSTED_BLOCKLIST_DOMAIN
+                        - source=blowfish_blocklist
+                        - source=blowfish_whitelist
+                        - source=metamask_blocklist
+                        - source=metamask_whitelist
+                        - source=phishfort_blocklist
+                        - source=scamsniffer_blocklist
+                        - source=phantom_blocklist
+                        - source=solflare_blocklist
+                        - source=defi_llama_whitelist
+                        - source=brand_whitelist
+                        example: blockchain=solana
+              examples:
+                simple:
+                  summary: Response for a query specifying two domains
+                  value:
+                  - domain: magicedennss.it
+                    status: PROCESSED
+                    riskScore: 1.0
+                    labels:
+                    - source=blowfish_blocklist
+                  - domain: 1nich.com
+                    status: PROCESSED
+                    riskScore: 0.5
+                    labels:
+                    - source=metamask_blocklist
+                    - source=phishfort_blocklist
+                    - warning[all]=BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+          - Internal Server Error
+          example: Internal Server Error
+    ApiKeyHeader:
+      description: API key
+      type: string
+      default: 4daa1e3b-87e6-40b2-8883-758feb6a8e46
+      example: e79e18b4-8ffa-4fab-9e2e-f24057644f93
+    BadRequest:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 400
+          example: No transactions to simulate
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 401
+          example: 'Unauthorized: invalid X-API-KEY header value'
+    ApiVersionHeader:
+      type: string
+      description: API version like 2022-06-01
+      default: '2022-06-01'
+      example: '2022-06-01'
+    ContentType:
+      description: Expected response content type
+      type: string
+      default: application/json
+      example: application/json
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
