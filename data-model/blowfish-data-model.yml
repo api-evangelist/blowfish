@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml
+description: >-
+  Entity graph derived from the Blowfish scan OpenAPI. Blowfish is a stateless analysis API:
+  requests describe a candidate transaction/message/domain and responses describe the verdict,
+  warnings and simulated state changes. There are no persisted, id-addressable resources.
+entities:
+- name: ScanRequest
+  kind: request
+  describes: A candidate transaction, message, or domain submitted for analysis.
+- name: ScanResult
+  kind: response
+  fields: [action, warnings, simulationResults]
+  relationships:
+  - has_one: Action
+    via: action
+  - has_many: Warning
+    via: warnings
+  - has_many: StateChange
+    via: simulationResults
+- name: Warning
+  kind: value-object
+  fields: [severity, kind, message]
+- name: StateChange
+  kind: value-object
+  note: >-
+    Simulated asset state changes; the spec enumerates typed variants — EvmStateChangeErc20Transfer,
+    Erc20Approval, Erc20Permit, NativeAssetTransfer, Erc721Transfer/Approval/ApprovalForAll,
+    Erc1155Transfer/ApprovalForAll, and Solana SolTransfer, SplTransfer, SplApproval,
+    SolStakeAuthorityChange.
+- name: BlocklistSnapshot
+  kind: response
+  note: download-blocklist returns a link to a downloadable snapshot of all blocked domains.
+notes: >-
+  No has_one/has_many relationships across persisted resources exist — the API does not expose
+  id-addressable objects (no customer/invoice-style graph). Identifiers in requests are on-chain
+  addresses, chain/network selectors, and dApp domains supplied by the caller.

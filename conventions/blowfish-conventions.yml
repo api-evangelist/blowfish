@@ -1,0 +1,48 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml
+authentication:
+  style: api-key
+  location: header
+  parameter: X-Api-Key
+  cross_ref: authentication/blowfish-authentication.yml
+versioning:
+  style: date-header
+  parameter: X-Api-Version
+  default: '2022-06-01'
+  note: >-
+    API version is pinned with the X-Api-Version request header (dated scheme, e.g. 2022-06-01).
+    The URL path also carries a resource version segment (v0). Cross_ref lifecycle/blowfish-lifecycle.yml.
+localization:
+  parameter: language
+  location: query
+  default: en
+  note: Response warning messages and human-readable simulation results are localized via the `language` query parameter.
+content_type:
+  request: application/json
+  response: application/json
+idempotency:
+  supported: false
+  note: >-
+    The scan endpoints are POST but semantically read-only (they simulate/analyze and return a
+    verdict without mutating state); Blowfish does not document an idempotency-key contract.
+pagination:
+  supported: false
+  note: Scan responses return a bounded result object/array; no pagination surface.
+error_envelope:
+  shape: '{ "error": "<message>" }'
+  content_type: application/json
+  cross_ref: errors/blowfish-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  note: >-
+    Free vs paid tiers are separated by host (free.api.blowfish.xyz vs api.blowfish.xyz);
+    rate-limit response headers are not documented in the public OpenAPI.
+result_model:
+  action_field: action
+  action_values: [NONE, WARN, BLOCK]
+  warnings_field: warnings
+  warning_severities: [WARNING, CRITICAL]
+  note: >-
+    Every scan response carries a recommended `action` and a severity-sorted `warnings` array
+    (index 0 is highest severity). See vocabulary/blowfish-scan-vocabulary.yml.

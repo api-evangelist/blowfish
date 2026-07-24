@@ -1,0 +1,50 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml
+description: >-
+  Controlled vocabulary emitted by the Blowfish scan endpoints — the recommended action,
+  warning severities, and the enumerated warning kinds returned when scanning transactions,
+  messages and domains. Derived verbatim from the published OpenAPI enums.
+terms:
+  action:
+    field: action
+    values:
+    - term: NONE
+      definition: Show the signing UI without modification.
+    - term: WARN
+      definition: Show the user the supplied warnings.
+    - term: BLOCK
+      definition: Show a block screen instead of the signing UI; the transaction is highly likely to be malicious.
+  warning_severity:
+    field: warnings[].severity
+    values:
+    - term: WARNING
+      definition: Yellow-level advisory warning.
+    - term: CRITICAL
+      definition: Red-level critical warning.
+  warning_kind:
+    field: warnings[].kind
+    values:
+    - SUSPECTED_MALICIOUS
+    - KNOWN_MALICIOUS
+    - TRANSFERRING_ERC20_TO_OWN_CONTRACT
+    - UNLIMITED_ALLOWANCE_TO_NFTS
+    - BULK_APPROVALS_REQUEST
+    - SET_OWNER_AUTHORITY
+    - TRUSTED_BLOCKLIST_DOMAIN
+    - SEMI_TRUSTED_BLOCKLIST_DOMAIN
+    - DANGLING_APPROVAL
+    - TRADE_FOR_NOTHING
+    - PERMIT_UNLIMITED_ALLOWANCE
+    - PERMIT_NO_EXPIRATION
+    - ETH_SIGN_TX_HASH
+    - OBFUSCATED_CODE
+    - DEVTOOLS_DISABLED
+    - BLOCKLISTED_DOMAIN_CROSS_ORIGIN
+    - WHITELISTED_DOMAIN_CROSS_ORIGIN
+    - TOO_MANY_TRANSACTIONS
+    - NON_ASCII_URL
+    - COMPROMISED_AUTHORITY_UPGRADE
+    - POISONED_ADDRESS
+    - APPROVAL_TO_E_O_A
+    - COPY_CAT_DOMAIN

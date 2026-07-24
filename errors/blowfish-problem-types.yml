@@ -1,0 +1,44 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml
+format: simple-json
+envelope:
+  field: error
+  content_type: application/json
+  note: >-
+    Blowfish returns a flat JSON object with a single `error` string field on 4xx/5xx.
+    It does not use RFC 9457 application/problem+json.
+problems:
+- status: 400
+  title: Bad request
+  schema: BadRequest
+  example: 'No transactions to simulate'
+  remediation: Ensure the request body contains a valid, non-empty set of transactions/message and required fields.
+  source_operations:
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transaction-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-message-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transactions-solana
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-domain
+  - openapi/blowfish-v20230308-openapi-original.yml#download-blocklist
+- status: 401
+  title: Unauthorized
+  schema: Unauthorized
+  example: 'Unauthorized: invalid X-API-KEY header value'
+  remediation: Supply a valid X-Api-Key header. Free-tier keys must call the free.api.blowfish.xyz host.
+  source_operations:
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transaction-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-message-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transactions-solana
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-domain
+  - openapi/blowfish-v20230308-openapi-original.yml#download-blocklist
+- status: 500
+  title: Internal server error
+  schema: InternalServerError
+  example: 'Internal Server Error'
+  remediation: Transient server error; retry with backoff. Contact support if persistent.
+  source_operations:
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transaction-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-message-evm
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-transactions-solana
+  - openapi/blowfish-v20230308-openapi-original.yml#scan-domain
+  - openapi/blowfish-v20230308-openapi-original.yml#download-blocklist

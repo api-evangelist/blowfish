@@ -1,0 +1,24 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml + https://github.com/blowfishxyz/blowfish-openapi-specs
+versioning:
+  scheme: date-header
+  header: X-Api-Version
+  current: '2022-06-01'
+  path_segment: v0
+  published_versions:
+  - '2022-06-01'
+  - '2023-03-08'
+  note: >-
+    API version is selected via the dated X-Api-Version header. Two dated spec snapshots are
+    published (v20220601, v20230308); the legacy blowfish-openapi-specs repo is deprecated in
+    favor of the live spec at https://api.blowfish.xyz/openapi/.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal deprecation/Sunset (RFC 8594) policy located; docs are password-protected.
+sla:
+  url: https://blowfish.xyz/
+  note: Enterprise plan advertises guaranteed uptime SLAs and priority support; free plan has no SLA.
+status_page: null
+deprecated_operations: []

@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Blowfish
+  version: 1.0.0
+extends: openapi/blowfish-v20230308-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-category: web3-security
+    x-apievangelist-artifacts:
+      authentication: authentication/blowfish-authentication.yml
+      conventions: conventions/blowfish-conventions.yml
+      errors: errors/blowfish-problem-types.yml
+      vocabulary: vocabulary/blowfish-scan-vocabulary.yml
+      data_model: data-model/blowfish-data-model.yml
+      packages: packages/blowfish-packages.yml
+- target: $.info
+  update:
+    x-apievangelist-summary: >-
+      Blowfish scans EVM and Solana transactions, EVM messages, and dApp domains, returning a
+      recommended action (NONE/WARN/BLOCK), severity-sorted warnings, and human-readable
+      simulation results to protect web3 wallet users before signing.

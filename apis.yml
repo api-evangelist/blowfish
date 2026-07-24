@@ -1,7 +1,24 @@
 aid: blowfish
 name: Blowfish
-description: 'Blowfish is a company surfaced as a portfolio company of paradigm and added to the API Evangelist
-  network as a stub for enrichment. Sector: security. This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  Blowfish is a proactive web3 security platform that scans EVM and Solana transactions, EVM
+  messages, and dApp domains before a user signs, returning a recommended action (NONE, WARN,
+  or BLOCK), severity-sorted warnings, and human-readable transaction simulation results. Its
+  Scan API and downloadable domain blocklist help wallets and dApps protect users from scams,
+  malicious token approvals, and phishing across 10+ blockchains. Backed by Paradigm.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://raw.githubusercontent.com/blowfishxyz/blowfish-openapi-specs/HEAD/blowfish.png
 url: https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,16 +28,117 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Security
-apis: []
+- Web3
+- Blockchain
+- Wallet
+- Transaction Scanning
+- Fraud Prevention
+- Cryptocurrency
+apis:
+- aid: blowfish:blowfish-download-blocklist-api
+  name: Blowfish Download blocklist API
+  description: Endpoints related to downloading blocklists
+  humanURL: https://docs.blowfish.xyz
+  baseURL: https://api.blowfish.xyz
+  tags:
+  - Download blocklist
+  properties:
+  - type: OpenAPI
+    url: openapi/blowfish-download-blocklist-api-openapi.yml
+- aid: blowfish:blowfish-scan-domain-api
+  name: Blowfish Scan domain API
+  description: Endpoints related to scanning dApp domains
+  humanURL: https://docs.blowfish.xyz
+  baseURL: https://api.blowfish.xyz
+  tags:
+  - Scan domain
+  properties:
+  - type: OpenAPI
+    url: openapi/blowfish-scan-domain-api-openapi.yml
+- aid: blowfish:blowfish-scan-message-api
+  name: Blowfish Scan message API
+  description: Endpoints related to scanning blockchain messages
+  humanURL: https://docs.blowfish.xyz
+  baseURL: https://api.blowfish.xyz
+  tags:
+  - Scan message
+  properties:
+  - type: OpenAPI
+    url: openapi/blowfish-scan-message-api-openapi.yml
+- aid: blowfish:blowfish-scan-transaction-api
+  name: Blowfish Scan transaction API
+  description: Endpoints related to scanning blockchain transactions
+  humanURL: https://docs.blowfish.xyz
+  baseURL: https://api.blowfish.xyz
+  tags:
+  - Scan transaction
+  properties:
+  - type: OpenAPI
+    url: openapi/blowfish-scan-transaction-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DeveloperPortal
+  url: https://docs.blowfish.xyz
+- type: Documentation
+  url: https://docs.blowfish.xyz
+- type: APIReference
+  url: https://docs.blowfish.xyz/reference
+- type: GettingStarted
+  url: https://docs.blowfish.xyz/docs/introduction
+- type: SignUp
+  url: https://portal.blowfish.xyz/
+- type: Blog
+  url: https://blog.blowfish.xyz
+- type: GitHubOrganization
+  url: https://github.com/blowfishxyz
+- type: Pricing
+  url: https://blowfish.xyz
+- type: PrivacyPolicy
+  url: https://extension.blowfish.xyz/privacy
+- type: Support
+  url: https://form.typeform.com/to/BHue5Hg0
+- type: Authentication
+  url: authentication/blowfish-authentication.yml
+- type: Conventions
+  url: conventions/blowfish-conventions.yml
+- type: ErrorCatalog
+  url: errors/blowfish-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/blowfish-lifecycle.yml
+- type: Conformance
+  url: conformance/blowfish-conformance.yml
+- type: Vocabulary
+  url: vocabulary/blowfish-scan-vocabulary.yml
+- type: DataModel
+  url: data-model/blowfish-data-model.yml
+- type: Packages
+  url: packages/blowfish-packages.yml
+- type: SDKs
+  url: packages/blowfish-packages.yml
+- type: Components
+  url: components/blowfish-components.yml
+- type: MCPServer
+  url: mcp/blowfish-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/blowfish-llms.txt
+- type: AgenticAccess
+  url: agentic-access/blowfish-agentic-access.yml
+- type: DomainSecurity
+  url: security/blowfish-domain-security.yml
 - type: Website
   url: https://blowfish.xyz
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

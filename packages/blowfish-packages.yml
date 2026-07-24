@@ -1,0 +1,31 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.npmjs.com/org/blowfishxyz
+packages:
+- language: javascript
+  registry: npm
+  name: '@blowfishxyz/api-client'
+  url: https://www.npmjs.com/package/@blowfishxyz/api-client
+  install: npm install @blowfishxyz/api-client
+  version: 0.1.20
+  license: MIT
+  official: true
+  description: TypeScript client for the Blowfish API (transaction, message and domain scanning).
+- language: javascript
+  registry: npm
+  name: '@blowfishxyz/blocklist'
+  url: https://www.npmjs.com/package/@blowfishxyz/blocklist
+  install: npm install @blowfishxyz/blocklist
+  version: 0.0.11
+  license: ISC
+  official: true
+  description: Fetch and execute lookups on Blowfish domain blocklists locally.
+- language: javascript
+  registry: npm
+  name: '@blowfishxyz/ui'
+  url: https://www.npmjs.com/package/@blowfishxyz/ui
+  install: npm install @blowfishxyz/ui
+  version: 0.0.1-beta.20
+  license: MIT
+  official: true
+  description: Blowfish reusable UI components for rendering scan results and warnings.

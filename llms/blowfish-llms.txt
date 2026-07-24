@@ -1,0 +1,26 @@
+# Blowfish
+
+> Blowfish is a proactive web3 security platform that scans EVM and Solana transactions, EVM messages, and dApp domains before a user signs, returning a recommended action (NONE/WARN/BLOCK), severity-sorted warnings, and human-readable simulation results. It has scanned billions of transactions and protects wallet users across 10+ blockchains. Backed by Paradigm.
+
+## APIs
+- [Blowfish Scan API (OpenAPI 3.1)](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/openapi/blowfish-v20230308-openapi-original.yml): scan-transaction-evm, scan-message-evm, scan-transactions-solana, scan-domain, download-blocklist. Auth: X-Api-Key header. Hosts: https://api.blowfish.xyz and https://free.api.blowfish.xyz.
+
+## Docs
+- [Documentation portal](https://docs.blowfish.xyz)
+- [Introduction / quick start](https://docs.blowfish.xyz/docs/introduction)
+- [Sign up (free)](https://portal.blowfish.xyz/)
+- [Blog](https://blog.blowfish.xyz)
+
+## Specs & artifacts
+- [Authentication profile](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/authentication/blowfish-authentication.yml)
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/conventions/blowfish-conventions.yml)
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/errors/blowfish-problem-types.yml)
+- [Scan vocabulary (actions, warning kinds)](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/vocabulary/blowfish-scan-vocabulary.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/data-model/blowfish-data-model.yml)
+- [Packages / SDKs](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/packages/blowfish-packages.yml)
+- [Agent skills index](https://raw.githubusercontent.com/api-evangelist/blowfish/refs/heads/main/skills/_index.yml)
+
+## SDKs
+- [@blowfishxyz/api-client (npm, TypeScript)](https://www.npmjs.com/package/@blowfishxyz/api-client)
+- [@blowfishxyz/blocklist (npm)](https://www.npmjs.com/package/@blowfishxyz/blocklist)
+- [@blowfishxyz/ui (npm, React components)](https://www.npmjs.com/package/@blowfishxyz/ui)

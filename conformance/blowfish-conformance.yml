@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/blowfish-v20230308-openapi-original.yml
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: spec is openapi 3.1.0
+- id: api-key-auth
+  conforms: true
+  evidence: securityScheme ApiKeyAuth (apiKey in header, X-Api-Key)
+- id: oauth2
+  conforms: false
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors use a flat { error } JSON object, not application/problem+json
+- id: json-api
+  conforms: false
+- id: rfc8594-sunset
+  conforms: false
+  evidence: no documented Sunset/Deprecation header policy
+- id: pagination
+  conforms: false
+  evidence: no pagination surface

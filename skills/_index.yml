@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/blowfish-v20230308-openapi-original.yml
+skills:
+- file: blowfish-scan-evm-transaction.md
+  name: Scan an EVM transaction before signing
+  api: openapi/blowfish-v20230308-openapi-original.yml
+  operations: [scan-transaction-evm]
+- file: blowfish-scan-solana-transaction.md
+  name: Scan Solana transactions before signing
+  api: openapi/blowfish-v20230308-openapi-original.yml
+  operations: [scan-transactions-solana]
+- file: blowfish-scan-domain.md
+  name: Scan a dApp domain for safety
+  api: openapi/blowfish-v20230308-openapi-original.yml
+  operations: [scan-domain, download-blocklist]

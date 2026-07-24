@@ -1,0 +1,20 @@
+{
+  "provider": "blowfish",
+  "sources": [
+    "blowfish-download-blocklist-api-openapi.yml",
+    "blowfish-scan-domain-api-openapi.yml",
+    "blowfish-scan-message-api-openapi.yml",
+    "blowfish-scan-transaction-api-openapi.yml"
+  ],
+  "outputs": [
+    "blowfish-download-blocklist-api-openapi.yml",
+    "blowfish-scan-domain-api-openapi.yml",
+    "blowfish-scan-message-api-openapi.yml",
+    "blowfish-scan-transaction-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

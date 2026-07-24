@@ -1,0 +1,22 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.npmjs.com/package/@blowfishxyz/ui
+families:
+- name: Blowfish UI Components
+  kind: react-component-library
+  loader: '@blowfishxyz/ui'
+  registry: npm
+  url: https://www.npmjs.com/package/@blowfishxyz/ui
+  description: >-
+    Reusable React UI components published by Blowfish for rendering scan results
+    directly in a wallet signing flow — transaction/message previews, simulation
+    state-change lists, and severity-coded warning banners driven by the Scan API
+    response (action, warnings[], simulationResults).
+  components:
+  - name: Scan result preview
+    purpose: Render the human-readable simulation results and recommended action returned by the scan endpoints.
+  - name: Warning banner
+    purpose: Display severity-coded (CRITICAL/WARNING) warnings from the scan response.
+notes: >-
+  These are client-side embeddable UI components, distinct from the server-side
+  SDK in packages/ (@blowfishxyz/api-client).

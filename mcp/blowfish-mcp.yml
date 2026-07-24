@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/blowfish-v20230308-openapi-original.yml
+note: >-
+  No official hosted/remote Blowfish MCP server was found (docs at docs.blowfish.xyz
+  are password-protected; no @modelcontextprotocol package or registry entry located).
+  This is a candidate tool list derived one-tool-per-operation from the published OpenAPI.
+server:
+  name: blowfish
+  transport: http
+tools:
+- name: scan_transaction_evm
+  description: Scan an Ethereum/Polygon transaction for recommended action, warnings and human-readable simulation.
+  source_operation: openapi/blowfish-v20230308-openapi-original.yml#scan-transaction-evm
+- name: scan_message_evm
+  description: Scan an EVM message (signTypedData / signMessage) for recommended action and warnings.
+  source_operation: openapi/blowfish-v20230308-openapi-original.yml#scan-message-evm
+- name: scan_transactions_solana
+  description: Scan Solana transactions for recommended action, warnings and simulation results.
+  source_operation: openapi/blowfish-v20230308-openapi-original.yml#scan-transactions-solana
+- name: scan_domain
+  description: Analyze a dApp domain to determine if it is safe for a user to interact with.
+  source_operation: openapi/blowfish-v20230308-openapi-original.yml#scan-domain
+- name: download_blocklist
+  description: Generate a downloadable snapshot of all blocked domains for local checking.
+  source_operation: openapi/blowfish-v20230308-openapi-original.yml#download-blocklist
