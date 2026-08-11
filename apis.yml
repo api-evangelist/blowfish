@@ -85,6 +85,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/blowfish-v20230308-overlay.yaml
 - type: DeveloperPortal
   url: https://docs.blowfish.xyz
 - type: Documentation
