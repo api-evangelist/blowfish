@@ -1,0 +1,448 @@
+{
+  "item": [
+    {
+      "id": "693a2d8b-cf73-4f40-b2e4-bddc7e138cde",
+      "name": "Scan message",
+      "description": {
+        "content": "Endpoints related to scanning blockchain messages",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "70c7dc38-f69b-4dff-b16e-831098adc077",
+          "name": "EVM",
+          "request": {
+            "name": "EVM",
+            "description": {
+              "content": "Scan an EVM message in order to receive recommended actions, tailored warnings and human-readable simulation results explaining what signing the message will do.\n### Supported networks\n| Network | Base URL |\n| --- | --- |\n| Ethereum Mainnet | https://api.blowfish.xyz/ethereum/v0/mainnet/scan/message |\n| Goerli Testnet | https://api.blowfish.xyz/ethereum/v0/goerli/scan/message |\n| Polygon Mainnet | https://api.blowfish.xyz/polygon/v0/mainnet/scan/message |\nNote:  The Ethereum and Polygon endpoints are equivalent when it comes to functionality as well as request and response formats.\nNote 2: If you are using a free, self-service API key from our Developer Portal, be sure to add the `free` subdomain (e.g., `https://free.api.blowfish.xyz`) to the above endpoints.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ethereum",
+                "v0",
+                "mainnet",
+                "scan",
+                "message"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "language",
+                  "value": "en",
+                  "description": "The language to use in the returned human-readable warnings and simulation results"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API Key",
+                "key": "X-Api-Key",
+                "value": "4daa1e3b-87e6-40b2-8883-758feb6a8e46"
+              },
+              {
+                "disabled": false,
+                "description": "Which version of the API to use",
+                "key": "X-Api-Version",
+                "value": "2022-06-01"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Api-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"kind\": \"<string>\",\n    \"data\": {\n      \"types\": {\n        \"EIP712Domain\": [\n          {\n            \"name\": \"<string>\",\n            \"type\": \"<string>\"\n          },\n          {\n            \"name\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        ],\n        \"key_0\": true\n      },\n      \"primaryType\": \"<string>\",\n      \"domain\": {\n        \"name\": \"<string>\",\n        \"version\": \"<string>\",\n        \"chainId\": \"<string>\",\n        \"verifyingContract\": \"<string>\"\n      },\n      \"message\": {\n        \"key_0\": 2715.1738145568293,\n        \"key_1\": \"string\"\n      }\n    }\n  },\n  \"metadata\": {\n    \"origin\": \"<string>\"\n  },\n  \"userAccount\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e184be9d-d20a-495a-ad2e-d2ab5c0143c1",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ethereum",
+                    "v0",
+                    "mainnet",
+                    "scan",
+                    "message"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "en"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": {\n    \"kind\": \"SIGN_TYPED_DATA\",\n    \"data\": {\n      \"domain\": {\n        \"name\": \"Permit2\",\n        \"chainId\": \"1\",\n        \"verifyingContract\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"\n      },\n      \"types\": {\n        \"PermitWitnessTransferFrom\": [\n          {\n            \"name\": \"permitted\",\n            \"type\": \"TokenPermissions\"\n          },\n          {\n            \"name\": \"spender\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"nonce\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"deadline\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"witness\",\n            \"type\": \"MockWitness\"\n          }\n        ],\n        \"TokenPermissions\": [\n          {\n            \"name\": \"token\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"amount\",\n            \"type\": \"uint256\"\n          }\n        ],\n        \"MockWitness\": [\n          {\n            \"name\": \"mock\",\n            \"type\": \"uint256\"\n          }\n        ]\n      },\n      \"primaryType\": \"PermitWitnessTransferFrom\",\n      \"message\": {\n        \"permitted\": {\n          \"token\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\n          \"amount\": \"13675000000\"\n        },\n        \"spender\": \"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45\",\n        \"nonce\": \"0\",\n        \"deadline\": \"281474976710655\",\n        \"witness\": {\n          \"mock\": \"0x0000000000000000000000000000000000000000000000000000000000000000\"\n        }\n      }\n    }\n  },\n  \"userAccount\": \"0xd8da6bf26964af9d7eed9e03e53415d37aa96045\",\n  \"metadata\": {\n    \"origin\": \"https://exampledapp.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"action\": \"NONE\",\n  \"warnings\": [],\n  \"simulationResults\": {\n    \"expectedStateChanges\": [\n      {\n        \"humanReadableDiff\": \"Permit to transfer up to 123 USDC within an hour\",\n        \"rawInfo\": {\n          \"kind\": \"ERC20_PERMIT\",\n          \"data\": {\n            \"contract\": {\n              \"kind\": \"ACCOUNT\",\n              \"address\": \"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48\"\n            },\n            \"name\": \"USD Coin\",\n            \"symbol\": \"USDC\",\n            \"decimals\": 6,\n            \"owner\": {\n              \"kind\": \"ACCOUNT\",\n              \"address\": \"0xd8da6bf26964af9d7eed9e03e53415d37aa96045\"\n            },\n            \"spender\": {\n              \"kind\": \"ACCOUNT\",\n              \"address\": \"0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45\"\n            },\n            \"amount\": \"123000000\",\n            \"nonce\": \"2\",\n            \"deadline\": 1667799719,\n            \"asset\": {\n              \"address\": \"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48\",\n              \"symbol\": \"USDC\",\n              \"name\": \"USD Coin\",\n              \"decimals\": 6,\n              \"verified\": true,\n              \"lists\": [\n                \"COINGECKO\",\n                \"ZERION\",\n                \"ONE_INCH\",\n                \"UNISWAP\",\n                \"MY_CRYPTO_API\",\n                \"KLEROS_TOKENS\"\n              ],\n              \"imageUrl\": \"https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png\"\n            }\n          }\n        }\n      }\n    ],\n    \"error\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbc3f0fe-2bad-457f-9749-6421540433c9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ethereum",
+                    "v0",
+                    "mainnet",
+                    "scan",
+                    "message"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "en"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": {\n    \"kind\": \"SIGN_TYPED_DATA\",\n    \"data\": {\n      \"domain\": {\n        \"name\": \"Permit2\",\n        \"chainId\": \"1\",\n        \"verifyingContract\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"\n      },\n      \"types\": {\n        \"PermitWitnessTransferFrom\": [\n          {\n            \"name\": \"permitted\",\n            \"type\": \"TokenPermissions\"\n          },\n          {\n            \"name\": \"spender\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"nonce\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"deadline\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"witness\",\n            \"type\": \"MockWitness\"\n          }\n        ],\n        \"TokenPermissions\": [\n          {\n            \"name\": \"token\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"amount\",\n            \"type\": \"uint256\"\n          }\n        ],\n        \"MockWitness\": [\n          {\n            \"name\": \"mock\",\n            \"type\": \"uint256\"\n          }\n        ]\n      },\n      \"primaryType\": \"PermitWitnessTransferFrom\",\n      \"message\": {\n        \"permitted\": {\n          \"token\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\n          \"amount\": \"13675000000\"\n        },\n        \"spender\": \"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45\",\n        \"nonce\": \"0\",\n        \"deadline\": \"281474976710655\",\n        \"witness\": {\n          \"mock\": \"0x0000000000000000000000000000000000000000000000000000000000000000\"\n        }\n      }\n    }\n  },\n  \"userAccount\": \"0xd8da6bf26964af9d7eed9e03e53415d37aa96045\",\n  \"metadata\": {\n    \"origin\": \"https://exampledapp.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"No transactions to simulate\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99c27c3d-7230-4375-a0d3-929e1343e9d5",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ethereum",
+                    "v0",
+                    "mainnet",
+                    "scan",
+                    "message"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "en"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": {\n    \"kind\": \"SIGN_TYPED_DATA\",\n    \"data\": {\n      \"domain\": {\n        \"name\": \"Permit2\",\n        \"chainId\": \"1\",\n        \"verifyingContract\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"\n      },\n      \"types\": {\n        \"PermitWitnessTransferFrom\": [\n          {\n            \"name\": \"permitted\",\n            \"type\": \"TokenPermissions\"\n          },\n          {\n            \"name\": \"spender\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"nonce\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"deadline\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"witness\",\n            \"type\": \"MockWitness\"\n          }\n        ],\n        \"TokenPermissions\": [\n          {\n            \"name\": \"token\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"amount\",\n            \"type\": \"uint256\"\n          }\n        ],\n        \"MockWitness\": [\n          {\n            \"name\": \"mock\",\n            \"type\": \"uint256\"\n          }\n        ]\n      },\n      \"primaryType\": \"PermitWitnessTransferFrom\",\n      \"message\": {\n        \"permitted\": {\n          \"token\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\n          \"amount\": \"13675000000\"\n        },\n        \"spender\": \"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45\",\n        \"nonce\": \"0\",\n        \"deadline\": \"281474976710655\",\n        \"witness\": {\n          \"mock\": \"0x0000000000000000000000000000000000000000000000000000000000000000\"\n        }\n      }\n    }\n  },\n  \"userAccount\": \"0xd8da6bf26964af9d7eed9e03e53415d37aa96045\",\n  \"metadata\": {\n    \"origin\": \"https://exampledapp.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized: invalid X-API-KEY header value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "866fb6eb-29f6-42d4-9ea4-eae0b222ac27",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ethereum",
+                    "v0",
+                    "mainnet",
+                    "scan",
+                    "message"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "en"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": {\n    \"kind\": \"SIGN_TYPED_DATA\",\n    \"data\": {\n      \"domain\": {\n        \"name\": \"Permit2\",\n        \"chainId\": \"1\",\n        \"verifyingContract\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"\n      },\n      \"types\": {\n        \"PermitWitnessTransferFrom\": [\n          {\n            \"name\": \"permitted\",\n            \"type\": \"TokenPermissions\"\n          },\n          {\n            \"name\": \"spender\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"nonce\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"deadline\",\n            \"type\": \"uint256\"\n          },\n          {\n            \"name\": \"witness\",\n            \"type\": \"MockWitness\"\n          }\n        ],\n        \"TokenPermissions\": [\n          {\n            \"name\": \"token\",\n            \"type\": \"address\"\n          },\n          {\n            \"name\": \"amount\",\n            \"type\": \"uint256\"\n          }\n        ],\n        \"MockWitness\": [\n          {\n            \"name\": \"mock\",\n            \"type\": \"uint256\"\n          }\n        ]\n      },\n      \"primaryType\": \"PermitWitnessTransferFrom\",\n      \"message\": {\n        \"permitted\": {\n          \"token\": \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\n          \"amount\": \"13675000000\"\n        },\n        \"spender\": \"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45\",\n        \"nonce\": \"0\",\n        \"deadline\": \"281474976710655\",\n        \"witness\": {\n          \"mock\": \"0x0000000000000000000000000000000000000000000000000000000000000000\"\n        }\n      }\n    }\n  },\n  \"userAccount\": \"0xd8da6bf26964af9d7eed9e03e53415d37aa96045\",\n  \"metadata\": {\n    \"origin\": \"https://exampledapp.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Internal Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://free.api.blowfish.xyz",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Api-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e0ff9f0d-cbe6-48ee-95d4-bda364aa6af5",
+    "name": "API reference Download blocklist Scan message API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Blowfish API reference specification\n\nContact Support:\n Name: Blowfish API Support\n Email: contact@blowfish.xyz",
+      "type": "text/plain"
+    }
+  }
+}

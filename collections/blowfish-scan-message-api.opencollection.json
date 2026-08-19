@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API reference Download blocklist Scan message API",
+    "version": "2022-06-01"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scan message",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "EVM",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://free.api.blowfish.xyz/ethereum/v0/mainnet/scan/message",
+            "headers": [
+              {
+                "name": "X-Api-Key",
+                "value": ""
+              },
+              {
+                "name": "X-Api-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "The language to use in the returned human-readable warnings and simulation results"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Api-Key",
+              "value": "{{X-Api-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Scan an EVM message in order to receive recommended actions, tailored warnings and human-readable simulation results explaining what signing the message will do.\n### Supported networks\n| Network | Base URL |\n| --- | --- |\n| Ethereum Mainnet | https://api.blowfish.xyz/ethereum/v0/mainnet/scan/message |\n| Goerli Testnet | https://api.blowfish.xyz/ethereum/v0/goerli/scan/message |\n| Polygon Mainnet | https://api.blowfish.xyz/polygon/v0/mainnet/scan/message |\nNote:  The Ethereum and Polygon endpoint"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

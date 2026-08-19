@@ -1,0 +1,411 @@
+{
+  "item": [
+    {
+      "id": "58f589fa-b604-43e0-97f7-dffb00001ce4",
+      "name": "Download blocklist",
+      "description": {
+        "content": "Endpoints related to downloading blocklists",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dd5579aa-8502-47f0-97f8-21b075758201",
+          "name": "Blocklist",
+          "request": {
+            "name": "Blocklist",
+            "description": {
+              "content": "Generate a downloadable snapshot with all blocked domains in order to check domains a user visits against a local blocklist, preserving their browsing privacy.\n\n### Integration\nThis API enables to verify domain safety while maintaining the end user's privacy. To integrate this API into your app, you should follow the steps below:\n\n1. Regularly update the blocklist metadata from the /v0/domains/blocklist endpoint.\n  - In browser extensions, set up a timer to update the blocklist every 2-5 minutes.\n  - In mobile apps, update the blocklist each time the user opens the app and every 2-5 minutes while the user is using the app.\n2. During each update, check if the app has previously downloaded a bloom filter with the hash bloomFilter.hash. If not, download it from bloomFilter.url.\n  - Since the bloom filter can be up to 1MB in size, make sure you never re-download the same bloom filter. Identical bloom filters always have the same URL and the same hash.\n  - Store the blocklist metadata (recentlyAdded, recentlyRemoved), bloom filter hash, and downloaded bloom filter.\n  - Chrome extensions can use localStorage. The endpoint is designed with a 5MB limit on localStorage in mind.\n  - The bloom filter is changed once a day, so users will never use more than 1 MB of traffic per day if the download and local caching logic is implemented correctly.\n3. When the user visits a domain, check if the domain is present on the bloom filter or the recentlyAdded list from the blocklist metadata and isn't present on the recentlyRemoved list. If this is the case, block the user from visiting the website.\n\nBrowser extensions and React Native apps can use the Javascript package [@blowfish/blocklist](https://www.npmjs.com/package/@blowfishxyz/blocklist) to implement the outlined logic. For example:\n\n```js\n// Regular updates\nimport { fetchBloomFilter, fetchDomainBlocklist } from '@blowfishxyz/blocklist';\n\nconst blocklist = await fetchDomainBlocklist(apiConfig);\nconst storedHash = [...]; // fetch it from your storage\nif (storedHash != blocklist.bloomFilter.hash) {\n    const bloomFilter = await fetchBloomFilter(blocklist.bloomFilter.url);\n    [...] // save bloomFilter to a local database\n    [...] // save bloomFilter.hash or blocklist.bloomFilter.hash to a local database\n}\n\n// Lookups\nimport { scanDomain, Action } from '@blowfishxyz/blocklist';\n\nconst recentlyAdded = [...]; // get from storage\nconst recentlyRemoved = [...]; // get from storage\nconst bloomFilter = [...]; // get from storage\n\nconst action = scanDomain(\n    bloomFilter,\n    recentlyAdded,\n    recentlyRemoved, \n    \"https://example.com/\"\n);\n\nif (action === Action.BLOCK) {\n    // block the domain\n}\n```\n\nFor more information on how to use the package, please refer to the NPM package description.\n\n### Priority lists\nThe API aggregates different proprietary Blowfish lists and ecosystem lists. In some cases, different lists may have conflicting data on whether to block or allow a domain. By providing priorityBlockLists and priorityAllowLists, you can override the results in these cases.\n\nIf a domain is blocked by one of the lists that Blowfish aggregates, but included in one of priorityAllowLists, it will not be included in the blocklist snapshot. Conversely, if a domain is allow-listed by one of the lists that Blowfish aggregates, but is included in one of priorityBlockLists, it will be included in the snapshot.\n\nThis is an advanced feature for integrators who want granular control over blocking domains. By default, the API uses internal list priority heuristics designed for most use cases. The Blowfish team continuously monitors the quality of the underlying blocklists and removes incorrect entries.\n\nBlowfish can also ingest custom blocklists and allowlists. If you have a custom list, you can reach out to the Blowfish team and provide a publicly available URL with the domains in a .txt format.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v0",
+                "domains",
+                "blocklist"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API Key",
+                "key": "X-Api-Key",
+                "value": "4daa1e3b-87e6-40b2-8883-758feb6a8e46"
+              },
+              {
+                "disabled": false,
+                "description": "Which version of the API to use",
+                "key": "X-Api-Version",
+                "value": "2022-06-01"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Api-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priorityAllowLists\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"priorityBlockLists\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b41daccf-25c8-49ee-ba74-a1e6c375495c",
+              "name": "A successful API response will include a link to download the bloom filter, which contains all blocked domains and any domains that were recently added to or removed from the filter.\n\nIt's important to note that the recentlyAdded and recentlyRemoved fields take precedence over the bloom filter result. \nThe bloom filter is updated every 24 hours. If new domains are added or removed, they will be listed in the recentlyAdded and recentlyRemoved fields until the bloom filter is updated.\nThe bloom filter file, located at bloomFilter.url, is guaranteed to be less than 1 MB\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains",
+                    "blocklist"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priorityAllowLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ],\n  \"priorityBlockLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"bloomFilter\": {\n    \"url\": \"https://d1ts37qlq4uz4s.cloudfront.net/e9087494a6b9fa71c26788a7111b1c9384ad9f539139d0b33c9856c3fc0351b2.json\",\n    \"hash\": \"e9087494a6b9fa71c26788a7111b1c9384ad9f539139d0b33c9856c3fc0351b2\"\n  },\n  \"recentlyAdded\": [\n    \"scammer.com\",\n    \"scammer.com\"\n  ],\n  \"recentlyRemoved\": [\n    \"notscammer.com\",\n    \"notscammer.com\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6539bf9f-4463-41fc-9ed3-33f1f873e2d6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains",
+                    "blocklist"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priorityAllowLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ],\n  \"priorityBlockLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"No transactions to simulate\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8e8614c-db42-4c79-adff-48486eb235bc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains",
+                    "blocklist"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priorityAllowLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ],\n  \"priorityBlockLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized: invalid X-API-KEY header value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6e04474-31ab-4d02-bb7f-c5fc7034f8a7",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains",
+                    "blocklist"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priorityAllowLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ],\n  \"priorityBlockLists\": [\n    \"BLOWFISH\",\n    \"BLOWFISH\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Internal Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://free.api.blowfish.xyz",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Api-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "098cb25f-39ec-4b97-bc1b-74c28863a7be",
+    "name": "API reference Download blocklist API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Blowfish API reference specification\n\nContact Support:\n Name: Blowfish API Support\n Email: contact@blowfish.xyz",
+      "type": "text/plain"
+    }
+  }
+}

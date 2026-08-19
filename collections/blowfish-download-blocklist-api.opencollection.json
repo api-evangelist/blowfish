@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API reference Download blocklist API",
+    "version": "2022-06-01"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Download blocklist",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Blocklist",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://free.api.blowfish.xyz/v0/domains/blocklist",
+            "headers": [
+              {
+                "name": "X-Api-Key",
+                "value": ""
+              },
+              {
+                "name": "X-Api-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Api-Key",
+              "value": "{{X-Api-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Generate a downloadable snapshot with all blocked domains in order to check domains a user visits against a local blocklist, preserving their browsing privacy.\n\n### Integration\nThis API enables to verify domain safety while maintaining the end user's privacy. To integrate this API into your app, you should follow the steps below:\n\n1. Regularly update the blocklist metadata from the /v0/domains/blocklist endpoint.\n  - In browser extensions, set up a timer to update the blocklist every 2-5 minutes"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

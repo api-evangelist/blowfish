@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API reference Download blocklist Scan transaction API",
+    "version": "2022-06-01"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scan transaction",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "EVM",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://free.api.blowfish.xyz/ethereum/v0/mainnet/scan/transaction",
+            "headers": [
+              {
+                "name": "X-Api-Key",
+                "value": ""
+              },
+              {
+                "name": "X-Api-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "The language to use in the returned human-readable warnings and simulation results"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Api-Key",
+              "value": "{{X-Api-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Scan a Ethereum/Polygon transaction in order to receive recommended actions, tailored warnings and human-readable simulation results explaining what the transaction will do.\n### Supported networks\n| Network | Base URL |\n| --- | --- |\n| Ethereum Mainnet | https://api.blowfish.xyz/ethereum/v0/mainnet/scan/transaction |\n| Goerli Testnet | https://api.blowfish.xyz/ethereum/v0/goerli/scan/transaction |\n| Polygon Mainnet | https://api.blowfish.xyz/polygon/v0/mainnet/scan/transaction |\nNote:  The Ether"
+        },
+        {
+          "info": {
+            "name": "Solana",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://free.api.blowfish.xyz/solana/v0/mainnet/scan/transactions",
+            "headers": [
+              {
+                "name": "X-Api-Key",
+                "value": ""
+              },
+              {
+                "name": "X-Api-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "The language to use in the returned human-readable warnings and simulation results"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Api-Key",
+              "value": "{{X-Api-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Scan Solana transactions in order to receive recommended actions, tailored warnings and human-readable simulation results explaining what the transaction will do. The API will return a list of warnings and a list of human-readable simulation results.\n### Supported networks\n| Network | Base URL |\n| --- | --- |\n| Mainnet | https://api.blowfish.xyz/solana/v0/mainnet/scan/transactions |\n| Testnet | https://api.blowfish.xyz/solana/v0/testnet/scan/transactions |\n| Devnet | https://api.blowfish.xyz/sol"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

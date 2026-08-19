@@ -1,0 +1,406 @@
+{
+  "item": [
+    {
+      "id": "865fa3a3-93e9-481e-aaf3-56b728e4bdc9",
+      "name": "Scan domain",
+      "description": {
+        "content": "Endpoints related to scanning dApp domains",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a5776d88-e89f-4da3-b1e7-569656c20963",
+          "name": "Domain",
+          "request": {
+            "name": "Domain",
+            "description": {
+              "content": "This endpoint allows customers to analyze dApp domains to determine if they are safe for users to interact with\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v0",
+                "domains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) API Key",
+                "key": "X-Api-Key",
+                "value": "4daa1e3b-87e6-40b2-8883-758feb6a8e46"
+              },
+              {
+                "disabled": false,
+                "description": "Which version of the API to use",
+                "key": "X-Api-Version",
+                "value": "2022-06-01"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Api-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df71fc47-5e13-457e-8727-f043d796f164",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"https://magicedennss.it\",\n    \"https://1nich.com\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"domain\": \"magicedennss.it\",\n    \"status\": \"PROCESSED\",\n    \"riskScore\": 1,\n    \"labels\": [\n      \"source=blowfish_blocklist\"\n    ]\n  },\n  {\n    \"domain\": \"1nich.com\",\n    \"status\": \"PROCESSED\",\n    \"riskScore\": 0.5,\n    \"labels\": [\n      \"source=metamask_blocklist\",\n      \"source=phishfort_blocklist\",\n      \"warning[all]=BLOCKLISTED_DOMAIN_CROSS_ORIGIN\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c606cdb8-95a2-4b58-a2f3-2cd482d0c05c",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"https://magicedennss.it\",\n    \"https://1nich.com\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"No transactions to simulate\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ff2cb5b-614d-4736-b97d-86bf7aa03cb3",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"https://magicedennss.it\",\n    \"https://1nich.com\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized: invalid X-API-KEY header value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b26f661-dcc4-4ca0-bd84-68e278d1d2d2",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v0",
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key",
+                    "key": "X-Api-Key",
+                    "value": "e79e18b4-8ffa-4fab-9e2e-f24057644f93"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Which version of the API to use",
+                    "key": "X-Api-Version",
+                    "value": "2022-06-01"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The expected return content type",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"https://magicedennss.it\",\n    \"https://1nich.com\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Internal Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://free.api.blowfish.xyz",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Api-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6727dd8a-dc86-47d4-b51f-89a368cf4c99",
+    "name": "API reference Download blocklist Scan domain API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Blowfish API reference specification\n\nContact Support:\n Name: Blowfish API Support\n Email: contact@blowfish.xyz",
+      "type": "text/plain"
+    }
+  }
+}

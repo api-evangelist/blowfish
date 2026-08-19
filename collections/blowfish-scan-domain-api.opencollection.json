@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API reference Download blocklist Scan domain API",
+    "version": "2022-06-01"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Key",
+      "value": "{{X-Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scan domain",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://free.api.blowfish.xyz/v0/domains",
+            "headers": [
+              {
+                "name": "X-Api-Key",
+                "value": ""
+              },
+              {
+                "name": "X-Api-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Api-Key",
+              "value": "{{X-Api-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint allows customers to analyze dApp domains to determine if they are safe for users to interact with\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
