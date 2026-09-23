@@ -1,10 +1,7 @@
 {
   "provider": "blowfish",
   "sources": [
-    "blowfish-download-blocklist-api-openapi.yml",
-    "blowfish-scan-domain-api-openapi.yml",
-    "blowfish-scan-message-api-openapi.yml",
-    "blowfish-scan-transaction-api-openapi.yml"
+    "_original/blowfish-v20230308-openapi-original.yml"
   ],
   "outputs": [
     "blowfish-download-blocklist-api-openapi.yml",
@@ -15,6 +12,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "blowfish-v20230308-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "blowfish-download-blocklist-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blowfish-scan-domain-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blowfish-scan-message-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blowfish-scan-transaction-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
