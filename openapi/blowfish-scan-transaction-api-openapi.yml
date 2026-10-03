@@ -843,59 +843,142 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
 components:
   schemas:
-    MetaplexTokenStandard:
-      type: string
-      enum:
-      - non_fungible
-      - fungible_asset
-      - fungible
-      - non_fungible_edition
-      - unknown
-      example: fungible
-    EvmStateChangeErc20Approval:
+    EvmAmount:
       type: object
-      description: Approval request to transfer user's ERC20 tokens
+      properties:
+        after:
+          type: string
+          example: '5000000000'
+          description: The value of the amount after the state change occurs
+        before:
+          type: string
+          example: '15000000000'
+          description: The value of the amount before the state change occurs
+    EvmTransactionError:
+      type: object
       properties:
         kind:
           type: string
-          description: What kind of state change this object is
           enum:
-          - ERC20_APPROVAL
-          example: ERC20_APPROVAL
-        data:
-          type: object
-          properties:
-            contract:
-              $ref: '#/components/schemas/EvmAddressInfo'
-            owner:
-              description: The owner of the ERC20 tokens
-              $ref: '#/components/schemas/EvmAddressInfo'
-            spender:
-              description: The entity that will be allowed to spend them if the approval is granted
-              $ref: '#/components/schemas/EvmAddressInfo'
-            amount:
-              $ref: '#/components/schemas/EvmAmount'
-            asset:
-              $ref: '#/components/schemas/EvmAsset'
-          description: Data associated with the state change
-    ContentType:
-      description: Expected response content type
-      type: string
-      default: application/json
-      example: application/json
+          - INVALID_TRANSACTION
+          example: INVALID_TRANSACTION
+        humanReadableError:
+          type: string
+          description: Human readable explanation of the error
+          example: Transaction error (LackOfFundForGasLimit)
+        error_type:
+          type: string
+          example: LackOfFundForGasLimit
+          description: For all the errors during the execution that do not have a revert reason. Like InvalidOpcode or LackOfFundForGasLimit.
     EvmSymbol:
       type: string
       example: USDT
-    EvmStateChangeErc721ApprovalForAll:
+    EvmName:
+      type: string
+      example: Tether USD
+    ApiKeyHeader:
+      description: API key
+      type: string
+      default: 4daa1e3b-87e6-40b2-8883-758feb6a8e46
+      example: e79e18b4-8ffa-4fab-9e2e-f24057644f93
+    EvmErc1155TokenId:
+      type: string
+      nullable: true
+      example: '100'
+      description: The ID of the ERC1155 token
+    EvmUserAccount:
+      type: string
+      description: A hex-representation of the user account who is being asked to sign the supplied transaction. In most cases this will be the same as the from property in the txObject
+      example: '0xc1e42f862d202b4a0ed552c1145735ee088f6ccf'
+    SolanaStageChangeSplTransfer:
       type: object
-      description: Approval request for all owned ERC721 NFTs in a collection
+      description: SPL token transfer
       properties:
         kind:
           type: string
           description: What kind of state change this object is
           enum:
-          - ERC721_APPROVAL_FOR_ALL
-          example: ERC721_APPROVAL_FOR_ALL
+          - SPL_TRANSFER
+          example: SPL_TRANSFER
+        data:
+          type: object
+          properties:
+            symbol:
+              type: string
+              description: SPL token symbol
+              example: USDC
+            name:
+              type: string
+              description: SPL token name
+              example: USD Coin
+            mint:
+              type: string
+              description: The SPL token mint program address
+              example: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+            decimals:
+              type: integer
+              description: SPL token decimals
+              example: 13
+            diff:
+              $ref: '#/components/schemas/Diff'
+            assetPrice:
+              description: The $-value price of the asset
+              $ref: '#/components/schemas/LegacyAssetPrice'
+    SolanaStateChangeSplApproval:
+      type: object
+      description: Approval request to transfer user's tokens
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - SPL_APPROVAL
+          example: SPL_APPROVAL
+        data:
+          type: object
+          properties:
+            delegate:
+              type: string
+              description: Who will be able to transfer the user's tokens on their behalf
+              example: 3kQJyZKC4tdQy3nqCqFiLDT2V7dzG65vSKtkUGCht5L3
+            mint:
+              type: string
+              description: The SPL token mint program address
+              example: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+            symbol:
+              type: string
+              description: SPL token symbol
+              example: USDC
+            name:
+              type: string
+              description: SPL token name
+              example: USD Coin
+            decimals:
+              type: integer
+              description: SPL token decimals
+              example: 13
+            diff:
+              $ref: '#/components/schemas/Diff'
+            supply:
+              type: integer
+              description: Total supply of the token
+              example: 1000000000000000000
+            metaplexTokenStandard:
+              description: The Metaplex token standard for this asset if any
+              $ref: '#/components/schemas/MetaplexTokenStandard'
+            assetPrice:
+              description: The $-value price of the asset
+              $ref: '#/components/schemas/LegacyAssetPrice'
+    EvmStateChangeErc1155ApprovalForAll:
+      type: object
+      description: Approval request for all owned ERC1155 assets
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC1155_APPROVAL_FOR_ALL
+          example: ERC1155_APPROVAL_FOR_ALL
         data:
           type: object
           properties:
@@ -903,26 +986,16 @@ components:
               $ref: '#/components/schemas/EvmAmount'
             contract:
               $ref: '#/components/schemas/EvmAddressInfo'
-            name:
-              $ref: '#/components/schemas/EvmName'
             owner:
+              description: The owner of the ERC1155 tokens
               $ref: '#/components/schemas/EvmAddressInfo'
             spender:
+              description: The entity that will be allowed to transfer all the owner's tokens of the given ERC1155 contract if the approval is granted
               $ref: '#/components/schemas/EvmAddressInfo'
-            symbol:
-              $ref: '#/components/schemas/EvmSymbol'
             assetPrice:
               description: The NFT collection's $-value floor price
               $ref: '#/components/schemas/LegacyAssetPrice'
           description: Data associated with the state change
-    InternalServerError:
-      type: object
-      properties:
-        error:
-          type: string
-          enum:
-          - Internal Server Error
-          example: Internal Server Error
     EvmStateChangeErc721Transfer:
       type: object
       description: ERC721 NFT transfers
@@ -952,6 +1025,52 @@ components:
               description: The NFT collection's $-value floor price
               $ref: '#/components/schemas/LegacyAssetPrice'
           description: Data associated with the state change
+    EvmStateChangeNativeAssetTransfer:
+      type: object
+      description: ETH transfers
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - NATIVE_ASSET_TRANSFER
+          example: NATIVE_ASSET_TRANSFER
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            decimals:
+              $ref: '#/components/schemas/EvmDecimals'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            symbol:
+              $ref: '#/components/schemas/EvmSymbol'
+            name:
+              $ref: '#/components/schemas/EvmName'
+          description: Data associated with the state change
+    EvmErc721TokenId:
+      type: string
+      nullable: true
+      example: '100'
+      description: The ID of the ERC721 token. It can temporarily be null in some edge cases where we are unable to parse it
+    LegacyAssetPrice:
+      type: object
+      properties:
+        source:
+          type: string
+          enum:
+          - Simplehash
+          - Defillama
+          - Coingecko
+          example: Coingecko
+        last_updated_at:
+          type: number
+          example: 1679331222
+        dollar_value_per_token:
+          type: number
+          format: float
+          example: 0.2784
     ActionEnum:
       type: string
       enum:
@@ -960,63 +1079,66 @@ components:
       - WARN
       description: "An enum value specifying the suggested action for a wallet to take.\nPossible values:\n  - `BLOCK`: Show the user a block screen instead of the signing UI since this is highly likely to be a malicious transaction. We suggest still having a greyed out link allowing the user to proceed if they really think they know better\n  - `WARN`: Show the user the supplied warnings.\n  - `NONE`: Show the signing UI without modification.\n"
       example: WARN
-    SolanaStateChangeSolStakeAuthorityChange:
+    EvmUnknownError:
       type: object
-      description: Transferring control over a user's SOL staking account
       properties:
         kind:
           type: string
-          description: What kind of state change this object is
           enum:
-          - SOL_STAKE_AUTHORITY_CHANGE
-          example: SOL_STAKE_AUTHORITY_CHANGE
-        data:
-          type: object
-          properties:
-            stakeAccount:
-              type: string
-              description: The stake account address
-              example: 2AG3beWwvyvEMLfwJcQS9DKMV62C3UWTTf8d7gp2vFQS
-            currAuthorities:
-              type: object
-              description: Current authorities with control over the staking account
-              properties:
-                staker:
-                  type: string
-                  description: Authority who can make staking changes
-                  example: J58MrVr9qJPzJJS8RPQUDfaFirN3PiVHXU48zr95FY48
-                withdrawer:
-                  type: string
-                  description: Authority who can withdraw the funds from the staking account
-                  example: J58MrVr9qJPzJJS8RPQUDfaFirN3PiVHXU48zr95FY48
-            futureAuthorities:
-              type: object
-              description: Future authorities who will have control over the staking account
-              properties:
-                staker:
-                  type: string
-                  description: Authority who can make staking changes
-                  example: EpochxXNkmM2akxBTuCEizW1oWyzgrPZ1CVZ3GpD7Egm
-                withdrawer:
-                  type: string
-                  description: Authority who can withdraw the funds from the staking account
-                  example: EpochxXNkmM2akxBTuCEizW1oWyzgrPZ1CVZ3GpD7Egm
-            symbol:
-              type: string
-              description: Symbol of the Solana native token
-              example: SOL
-            name:
-              type: string
-              description: Name of the Solana native token
-              example: Solana Native Token
-            decimals:
-              type: integer
-              description: Decimals of the Solana native token
-              example: 9
-            solStaked:
-              type: integer
-              description: Amount of SOL staked by this account
-              example: 1000000000000
+          - UNKNOWN_ERROR
+          example: UNKNOWN_ERROR
+        humanReadableError:
+          type: string
+          example: Unable to simulate transaction
+          description: Human readable explanation of the error
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 401
+          example: 'Unauthorized: invalid X-API-KEY header value'
+    EvmTransactionRevertedError:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum:
+          - INVALID_TRANSACTION
+          example: INVALID_TRANSACTION
+        humanReadableError:
+          type: string
+          description: Human readable explanation of the error
+          example: Transaction reverted (Token does not exist)
+        revert_reason:
+          type: string
+          example: 'execution reverted: Too little received'
+          description: Why the transaction reverted
+    BadRequest:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 400
+          example: No transactions to simulate
+    MetaplexTokenStandard:
+      type: string
+      enum:
+      - non_fungible
+      - fungible_asset
+      - fungible
+      - non_fungible_edition
+      - unknown
+      example: fungible
+    RequestMetadata:
+      type: object
+      properties:
+        origin:
+          type: string
+          description: DApp domain proposing these transactions
+          example: https://uniswap.org
+      required:
+      - origin
     Languages:
       type: string
       default: en
@@ -1121,151 +1243,51 @@ components:
       - yo
       - zh_CN
       - zh_TW
-    SolanaStageChangeSplTransfer:
+    EvmStateChangeErc1155Transfer:
       type: object
-      description: SPL token transfer
+      description: ERC1155 transfers
       properties:
         kind:
           type: string
           description: What kind of state change this object is
           enum:
-          - SPL_TRANSFER
-          example: SPL_TRANSFER
+          - ERC1155_TRANSFER
+          example: ERC1155_TRANSFER
         data:
           type: object
           properties:
-            symbol:
-              type: string
-              description: SPL token symbol
-              example: USDC
-            name:
-              type: string
-              description: SPL token name
-              example: USD Coin
-            mint:
-              type: string
-              description: The SPL token mint program address
-              example: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
-            decimals:
-              type: integer
-              description: SPL token decimals
-              example: 13
-            diff:
-              $ref: '#/components/schemas/Diff'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            metadata:
+              $ref: '#/components/schemas/EvmNftMetadata'
+            tokenId:
+              $ref: '#/components/schemas/EvmErc1155TokenId'
             assetPrice:
-              description: The $-value price of the asset
+              description: The NFT collection's $-value floor price
               $ref: '#/components/schemas/LegacyAssetPrice'
-    Diff:
+          description: Data associated with the state change
+    EvmStateChangeErc20Transfer:
       type: object
-      properties:
-        sign:
-          type: string
-          description: Whether the amount is positive or negative
-          enum:
-          - PLUS
-          - MINUS
-          example: PLUS
-        digits:
-          type: integer
-          example: 500000
-    EvmSimulationFailedError:
-      type: object
+      description: ERC20 token transfers
       properties:
         kind:
           type: string
+          description: What kind of state change this object is
           enum:
-          - SIMULATION_FAILED
-          example: SIMULATION_FAILED
-        humanReadableError:
-          type: string
-          description: Human readable explanation of the error
-          example: Transaction simulation failed
-        reason:
-          type: string
-          description: Internal reason for the simulation failure
-          example: Example reason
-    ApiVersionHeader:
-      type: string
-      description: API version like 2022-06-01
-      default: '2022-06-01'
-      example: '2022-06-01'
-    EvmName:
-      type: string
-      example: Tether USD
-    EvmAsset:
-      type: object
-      properties:
-        address:
-          type: string
-          example: '0xdac17f958d2ee523a2206206994597c13d831ec7'
-          description: The contract address of the asset
-        symbol:
-          type: string
-          example: USDT
-          description: The symbol of the asset
-        name:
-          type: string
-          example: Tether USD
-          description: The name of the asset
-        decimals:
-          type: integer
-          example: 6
-          description: The number of decimal places used by the asset
-        verified:
-          type: boolean
-          example: true
-          description: Whether the asset is verified as safe
-        lists:
-          type: array
-          items:
-            type: string
-            enum:
-            - COINGECKO
-            - ZERION
-            - ONE_INCH
-            - UNISWAP
-            - MY_CRYPTO_API
-            - KLEROS_TOKENS
-            - POLYGON_POPULAR_TOKENS
-            - EVM_NATIVE
-            example: COINGECKO
-          description: The trusted token lists on which this asset is listed
-        imageUrl:
-          type: string
-          description: The URL of the asset's image
-          nullable: true
-          example: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x6b175474e89094c44da98b954eedeac495271d0f.png
-        price:
-          description: $-value price of the asset. Floor price of the collection if asset is an NFT.
-          $ref: '#/components/schemas/AssetPrice'
-    LegacyAssetPrice:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - Simplehash
-          - Defillama
-          - Coingecko
-          example: Coingecko
-        last_updated_at:
-          type: number
-          example: 1679331222
-        dollar_value_per_token:
-          type: number
-          format: float
-          example: 0.2784
-    EvmAmount:
-      type: object
-      properties:
-        after:
-          type: string
-          example: '5000000000'
-          description: The value of the amount after the state change occurs
-        before:
-          type: string
-          example: '15000000000'
-          description: The value of the amount before the state change occurs
+          - ERC20_TRANSFER
+          example: ERC20_TRANSFER
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            asset:
+              $ref: '#/components/schemas/EvmAsset'
+          description: Data associated with the state change
     Warning:
       type: array
       description: An array of warnings generated from scanning the transactions. All these warnings won't be returned in a single response (some are mutually exclusive) but it is advisable that your UI can display multiple warnings. Warnings are returned sorted by severity, so if you can only show a user one warning, show them the one at the 0th index.
@@ -1319,79 +1341,111 @@ components:
           format: uri
           example: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x6b175474e89094c44da98b954eedeac495271d0f.png
       description: Metadata associated with the NFT
-    EvmTransactionRevertedError:
+    AssetPrice:
       type: object
       properties:
-        kind:
+        source:
           type: string
           enum:
-          - INVALID_TRANSACTION
-          example: INVALID_TRANSACTION
-        humanReadableError:
-          type: string
-          description: Human readable explanation of the error
-          example: Transaction reverted (Token does not exist)
-        revert_reason:
-          type: string
-          example: 'execution reverted: Too little received'
-          description: Why the transaction reverted
-    BadRequest:
+          - Simplehash
+          - Defillama
+          - Coingecko
+          example: Coingecko
+        updatedAt:
+          type: number
+          example: 1679331222
+        dollarValuePerToken:
+          type: number
+          format: float
+          example: 0.2784
+    EvmStateChangeErc721ApprovalForAll:
       type: object
-      properties:
-        error:
-          type: string
-          description: The error that caused the 400
-          example: No transactions to simulate
-    SolanaStateChangeSplApproval:
-      type: object
-      description: Approval request to transfer user's tokens
+      description: Approval request for all owned ERC721 NFTs in a collection
       properties:
         kind:
           type: string
           description: What kind of state change this object is
           enum:
-          - SPL_APPROVAL
-          example: SPL_APPROVAL
+          - ERC721_APPROVAL_FOR_ALL
+          example: ERC721_APPROVAL_FOR_ALL
         data:
           type: object
           properties:
-            delegate:
-              type: string
-              description: Who will be able to transfer the user's tokens on their behalf
-              example: 3kQJyZKC4tdQy3nqCqFiLDT2V7dzG65vSKtkUGCht5L3
-            mint:
-              type: string
-              description: The SPL token mint program address
-              example: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
-            symbol:
-              type: string
-              description: SPL token symbol
-              example: USDC
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
             name:
-              type: string
-              description: SPL token name
-              example: USD Coin
-            decimals:
-              type: integer
-              description: SPL token decimals
-              example: 13
-            diff:
-              $ref: '#/components/schemas/Diff'
-            supply:
-              type: integer
-              description: Total supply of the token
-              example: 1000000000000000000
-            metaplexTokenStandard:
-              description: The Metaplex token standard for this asset if any
-              $ref: '#/components/schemas/MetaplexTokenStandard'
+              $ref: '#/components/schemas/EvmName'
+            owner:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            spender:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            symbol:
+              $ref: '#/components/schemas/EvmSymbol'
             assetPrice:
-              description: The $-value price of the asset
+              description: The NFT collection's $-value floor price
               $ref: '#/components/schemas/LegacyAssetPrice'
-    ApiKeyHeader:
-      description: API key
-      type: string
-      default: 4daa1e3b-87e6-40b2-8883-758feb6a8e46
-      example: e79e18b4-8ffa-4fab-9e2e-f24057644f93
+          description: Data associated with the state change
+    Diff:
+      type: object
+      properties:
+        sign:
+          type: string
+          description: Whether the amount is positive or negative
+          enum:
+          - PLUS
+          - MINUS
+          example: PLUS
+        digits:
+          type: integer
+          example: 500000
+    EvmAsset:
+      type: object
+      properties:
+        address:
+          type: string
+          example: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+          description: The contract address of the asset
+        symbol:
+          type: string
+          example: USDT
+          description: The symbol of the asset
+        name:
+          type: string
+          example: Tether USD
+          description: The name of the asset
+        decimals:
+          type: integer
+          example: 6
+          description: The number of decimal places used by the asset
+        verified:
+          type: boolean
+          example: true
+          description: Whether the asset is verified as safe
+        lists:
+          type: array
+          items:
+            type: string
+            enum:
+            - COINGECKO
+            - ZERION
+            - ONE_INCH
+            - UNISWAP
+            - MY_CRYPTO_API
+            - KLEROS_TOKENS
+            - POLYGON_POPULAR_TOKENS
+            - EVM_NATIVE
+            example: COINGECKO
+          description: The trusted token lists on which this asset is listed
+        imageUrl:
+          type: string
+          description: The URL of the asset's image
+          nullable: true
+          example: https://d1ts37qlq4uz4s.cloudfront.net/evm__evm%3A%3Aethereum__evm%3A%3Aethereum%3A%3Amainnet__0x6b175474e89094c44da98b954eedeac495271d0f.png
+        price:
+          description: $-value price of the asset. Floor price of the collection if asset is an NFT.
+          $ref: '#/components/schemas/AssetPrice'
     EvmAddressInfo:
       type: object
       properties:
@@ -1405,13 +1459,157 @@ components:
           - ACCOUNT
           example: ACCOUNT
           description: The type of address
-    Unauthorized:
+    InternalServerError:
       type: object
       properties:
         error:
           type: string
-          description: The error that caused the 401
-          example: 'Unauthorized: invalid X-API-KEY header value'
+          enum:
+          - Internal Server Error
+          example: Internal Server Error
+    EvmDecimals:
+      type: integer
+      example: 6
+    SolanaStateChangeSolTransfer:
+      type: object
+      description: Solana native token transfer
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - SOL_TRANSFER
+          example: SOL_TRANSFER
+        data:
+          type: object
+          description: Machine-parseable data relevant to this state change kind
+          properties:
+            symbol:
+              type: string
+              description: Symbol of the Solana native token
+              example: SOL
+            name:
+              type: string
+              description: Name of the Solana native token
+              example: Solana Native Token
+            decimals:
+              type: integer
+              description: Decimals of the Solana native token
+              example: 9
+            diff:
+              $ref: '#/components/schemas/Diff'
+            assetPrice:
+              description: The $-value price of the asset
+              $ref: '#/components/schemas/LegacyAssetPrice'
+    EvmSimulationFailedError:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum:
+          - SIMULATION_FAILED
+          example: SIMULATION_FAILED
+        humanReadableError:
+          type: string
+          description: Human readable explanation of the error
+          example: Transaction simulation failed
+        reason:
+          type: string
+          description: Internal reason for the simulation failure
+          example: Example reason
+    SolanaStateChangeSolStakeAuthorityChange:
+      type: object
+      description: Transferring control over a user's SOL staking account
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - SOL_STAKE_AUTHORITY_CHANGE
+          example: SOL_STAKE_AUTHORITY_CHANGE
+        data:
+          type: object
+          properties:
+            stakeAccount:
+              type: string
+              description: The stake account address
+              example: 2AG3beWwvyvEMLfwJcQS9DKMV62C3UWTTf8d7gp2vFQS
+            currAuthorities:
+              type: object
+              description: Current authorities with control over the staking account
+              properties:
+                staker:
+                  type: string
+                  description: Authority who can make staking changes
+                  example: J58MrVr9qJPzJJS8RPQUDfaFirN3PiVHXU48zr95FY48
+                withdrawer:
+                  type: string
+                  description: Authority who can withdraw the funds from the staking account
+                  example: J58MrVr9qJPzJJS8RPQUDfaFirN3PiVHXU48zr95FY48
+            futureAuthorities:
+              type: object
+              description: Future authorities who will have control over the staking account
+              properties:
+                staker:
+                  type: string
+                  description: Authority who can make staking changes
+                  example: EpochxXNkmM2akxBTuCEizW1oWyzgrPZ1CVZ3GpD7Egm
+                withdrawer:
+                  type: string
+                  description: Authority who can withdraw the funds from the staking account
+                  example: EpochxXNkmM2akxBTuCEizW1oWyzgrPZ1CVZ3GpD7Egm
+            symbol:
+              type: string
+              description: Symbol of the Solana native token
+              example: SOL
+            name:
+              type: string
+              description: Name of the Solana native token
+              example: Solana Native Token
+            decimals:
+              type: integer
+              description: Decimals of the Solana native token
+              example: 9
+            solStaked:
+              type: integer
+              description: Amount of SOL staked by this account
+              example: 1000000000000
+    ApiVersionHeader:
+      type: string
+      description: API version like 2022-06-01
+      default: '2022-06-01'
+      example: '2022-06-01'
+    ContentType:
+      description: Expected response content type
+      type: string
+      default: application/json
+      example: application/json
+    EvmStateChangeErc20Approval:
+      type: object
+      description: Approval request to transfer user's ERC20 tokens
+      properties:
+        kind:
+          type: string
+          description: What kind of state change this object is
+          enum:
+          - ERC20_APPROVAL
+          example: ERC20_APPROVAL
+        data:
+          type: object
+          properties:
+            contract:
+              $ref: '#/components/schemas/EvmAddressInfo'
+            owner:
+              description: The owner of the ERC20 tokens
+              $ref: '#/components/schemas/EvmAddressInfo'
+            spender:
+              description: The entity that will be allowed to spend them if the approval is granted
+              $ref: '#/components/schemas/EvmAddressInfo'
+            amount:
+              $ref: '#/components/schemas/EvmAmount'
+            asset:
+              $ref: '#/components/schemas/EvmAsset'
+          description: Data associated with the state change
     EvmStateChangeErc721Approval:
       type: object
       description: Approval request for a specific token in an ERC721 collection
@@ -1445,204 +1643,6 @@ components:
               description: The NFT collection's $-value floor price
               $ref: '#/components/schemas/LegacyAssetPrice'
           description: Data associated with the state change
-    AssetPrice:
-      type: object
-      properties:
-        source:
-          type: string
-          enum:
-          - Simplehash
-          - Defillama
-          - Coingecko
-          example: Coingecko
-        updatedAt:
-          type: number
-          example: 1679331222
-        dollarValuePerToken:
-          type: number
-          format: float
-          example: 0.2784
-    SolanaStateChangeSolTransfer:
-      type: object
-      description: Solana native token transfer
-      properties:
-        kind:
-          type: string
-          description: What kind of state change this object is
-          enum:
-          - SOL_TRANSFER
-          example: SOL_TRANSFER
-        data:
-          type: object
-          description: Machine-parseable data relevant to this state change kind
-          properties:
-            symbol:
-              type: string
-              description: Symbol of the Solana native token
-              example: SOL
-            name:
-              type: string
-              description: Name of the Solana native token
-              example: Solana Native Token
-            decimals:
-              type: integer
-              description: Decimals of the Solana native token
-              example: 9
-            diff:
-              $ref: '#/components/schemas/Diff'
-            assetPrice:
-              description: The $-value price of the asset
-              $ref: '#/components/schemas/LegacyAssetPrice'
-    EvmTransactionError:
-      type: object
-      properties:
-        kind:
-          type: string
-          enum:
-          - INVALID_TRANSACTION
-          example: INVALID_TRANSACTION
-        humanReadableError:
-          type: string
-          description: Human readable explanation of the error
-          example: Transaction error (LackOfFundForGasLimit)
-        error_type:
-          type: string
-          example: LackOfFundForGasLimit
-          description: For all the errors during the execution that do not have a revert reason. Like InvalidOpcode or LackOfFundForGasLimit.
-    EvmErc721TokenId:
-      type: string
-      nullable: true
-      example: '100'
-      description: The ID of the ERC721 token. It can temporarily be null in some edge cases where we are unable to parse it
-    EvmStateChangeErc1155ApprovalForAll:
-      type: object
-      description: Approval request for all owned ERC1155 assets
-      properties:
-        kind:
-          type: string
-          description: What kind of state change this object is
-          enum:
-          - ERC1155_APPROVAL_FOR_ALL
-          example: ERC1155_APPROVAL_FOR_ALL
-        data:
-          type: object
-          properties:
-            amount:
-              $ref: '#/components/schemas/EvmAmount'
-            contract:
-              $ref: '#/components/schemas/EvmAddressInfo'
-            owner:
-              description: The owner of the ERC1155 tokens
-              $ref: '#/components/schemas/EvmAddressInfo'
-            spender:
-              description: The entity that will be allowed to transfer all the owner's tokens of the given ERC1155 contract if the approval is granted
-              $ref: '#/components/schemas/EvmAddressInfo'
-            assetPrice:
-              description: The NFT collection's $-value floor price
-              $ref: '#/components/schemas/LegacyAssetPrice'
-          description: Data associated with the state change
-    EvmDecimals:
-      type: integer
-      example: 6
-    EvmUserAccount:
-      type: string
-      description: A hex-representation of the user account who is being asked to sign the supplied transaction. In most cases this will be the same as the from property in the txObject
-      example: '0xc1e42f862d202b4a0ed552c1145735ee088f6ccf'
-    EvmStateChangeNativeAssetTransfer:
-      type: object
-      description: ETH transfers
-      properties:
-        kind:
-          type: string
-          description: What kind of state change this object is
-          enum:
-          - NATIVE_ASSET_TRANSFER
-          example: NATIVE_ASSET_TRANSFER
-        data:
-          type: object
-          properties:
-            contract:
-              $ref: '#/components/schemas/EvmAddressInfo'
-            decimals:
-              $ref: '#/components/schemas/EvmDecimals'
-            amount:
-              $ref: '#/components/schemas/EvmAmount'
-            symbol:
-              $ref: '#/components/schemas/EvmSymbol'
-            name:
-              $ref: '#/components/schemas/EvmName'
-          description: Data associated with the state change
-    EvmStateChangeErc1155Transfer:
-      type: object
-      description: ERC1155 transfers
-      properties:
-        kind:
-          type: string
-          description: What kind of state change this object is
-          enum:
-          - ERC1155_TRANSFER
-          example: ERC1155_TRANSFER
-        data:
-          type: object
-          properties:
-            amount:
-              $ref: '#/components/schemas/EvmAmount'
-            contract:
-              $ref: '#/components/schemas/EvmAddressInfo'
-            metadata:
-              $ref: '#/components/schemas/EvmNftMetadata'
-            tokenId:
-              $ref: '#/components/schemas/EvmErc1155TokenId'
-            assetPrice:
-              description: The NFT collection's $-value floor price
-              $ref: '#/components/schemas/LegacyAssetPrice'
-          description: Data associated with the state change
-    EvmErc1155TokenId:
-      type: string
-      nullable: true
-      example: '100'
-      description: The ID of the ERC1155 token
-    EvmStateChangeErc20Transfer:
-      type: object
-      description: ERC20 token transfers
-      properties:
-        kind:
-          type: string
-          description: What kind of state change this object is
-          enum:
-          - ERC20_TRANSFER
-          example: ERC20_TRANSFER
-        data:
-          type: object
-          properties:
-            contract:
-              $ref: '#/components/schemas/EvmAddressInfo'
-            amount:
-              $ref: '#/components/schemas/EvmAmount'
-            asset:
-              $ref: '#/components/schemas/EvmAsset'
-          description: Data associated with the state change
-    EvmUnknownError:
-      type: object
-      properties:
-        kind:
-          type: string
-          enum:
-          - UNKNOWN_ERROR
-          example: UNKNOWN_ERROR
-        humanReadableError:
-          type: string
-          example: Unable to simulate transaction
-          description: Human readable explanation of the error
-    RequestMetadata:
-      type: object
-      properties:
-        origin:
-          type: string
-          description: DApp domain proposing these transactions
-          example: https://uniswap.org
-      required:
-      - origin
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
