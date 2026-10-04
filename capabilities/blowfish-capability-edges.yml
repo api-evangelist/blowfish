@@ -1,0 +1,47 @@
+slug: blowfish
+provider: Blowfish
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Scan domain
+  spec_file: blowfish-scan-domain-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.7
+  evidence: 'POST /v0/domains  scan-domain  Domain; vendor: ''scans ... dApp domains before a user signs,
+    returning a recommended action (NONE, WARN, or BLOCK)'''
+  reason: The operation submits a domain for malicious/phishing assessment and returns a block/warn verdict
+    — security threat detection. Not a financial-crime or compliance screening surface despite the web3
+    context; the candidate frame's security capability is the honest fit.
+- tag: Scan message
+  spec_file: blowfish-scan-message-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.7
+  evidence: POST /ethereum/v0/mainnet/scan/message  scan-message-evm; schemas EvmSignMessage, Warning,
+    ActionEnum
+  reason: Scanning an EVM sign-message payload and returning severity-sorted warnings and a recommended
+    action is malicious-activity detection and response guidance, i.e. threat detection. Schema names
+    (Warning, ActionEnum) ground the detection semantics.
+- tag: Scan transaction
+  spec_file: blowfish-scan-transaction-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.7
+  evidence: POST /ethereum/v0/mainnet/scan/transaction  scan-transaction-evm; POST /solana/v0/mainnet/scan/transactions;
+    schemas EvmStateChangeErc20Transfer, ActionEnum
+  reason: Pre-signature simulation and scanning of transactions to flag malicious approvals/transfers
+    is a security threat-detection service for the integrating wallet, not a payments or settlement capability.
