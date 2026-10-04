@@ -174,35 +174,11 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
 components:
   schemas:
-    ApiVersionHeader:
-      type: string
-      description: API version like 2022-06-01
-      default: '2022-06-01'
-      example: '2022-06-01'
-    ContentType:
-      description: Expected response content type
-      type: string
-      default: application/json
-      example: application/json
-    Unauthorized:
-      type: object
-      properties:
-        error:
-          type: string
-          description: The error that caused the 401
-          example: 'Unauthorized: invalid X-API-KEY header value'
     ApiKeyHeader:
       description: API key
       type: string
       default: 4daa1e3b-87e6-40b2-8883-758feb6a8e46
       example: e79e18b4-8ffa-4fab-9e2e-f24057644f93
-    BadRequest:
-      type: object
-      properties:
-        error:
-          type: string
-          description: The error that caused the 400
-          example: No transactions to simulate
     InternalServerError:
       type: object
       properties:
@@ -211,6 +187,30 @@ components:
           enum:
           - Internal Server Error
           example: Internal Server Error
+    BadRequest:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 400
+          example: No transactions to simulate
+    ContentType:
+      description: Expected response content type
+      type: string
+      default: application/json
+      example: application/json
+    ApiVersionHeader:
+      type: string
+      description: API version like 2022-06-01
+      default: '2022-06-01'
+      example: '2022-06-01'
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The error that caused the 401
+          example: 'Unauthorized: invalid X-API-KEY header value'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
